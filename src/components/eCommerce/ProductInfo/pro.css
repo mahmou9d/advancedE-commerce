@@ -1,0 +1,18 @@
+.diraction{
+    background: #222 ;
+padding: 1rem;
+border-radius: 8px;
+min-width: 250px;
+display: flex;
+justify-content: space-evenly;
+flex-wrap: wrap;
+}
+/* .column{
+    width: 600px;
+} */
+
+@media (max-width:767px) {
+    .diraction{
+        min-width: 150px;
+    }
+}

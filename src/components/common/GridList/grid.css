@@ -1,0 +1,10 @@
+.grid{
+    width: 300px;
+}
+
+
+@media (max-width:767px) {
+    .grid{
+        width: 150px;
+    }
+}

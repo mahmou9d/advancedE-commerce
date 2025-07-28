@@ -1,0 +1,10 @@
+.container{
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+.wrappert{
+  margin-top: 15px;
+  /* height: 100%; */
+  margin-bottom: 30px;
+}
