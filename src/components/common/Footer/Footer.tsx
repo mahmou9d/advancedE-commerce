@@ -11,7 +11,6 @@ const {
   citem,
   bottombarcontent,
   bottom,
-  socialIcons,
   linkItem,
   divider,
   companyInfo,
