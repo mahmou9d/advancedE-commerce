@@ -11,6 +11,7 @@ type InputProps<TFieldValue extends FieldValues> = {
   formText?: string;
   success?: string;
   disabled?: boolean;
+  placeholder?: string;
 };
 
 const Input = <TFieldValue extends FieldValues>({

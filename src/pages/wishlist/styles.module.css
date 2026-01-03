@@ -1,0 +1,260 @@
+/* Page Wrapper */
+.pageWrapper {
+  min-height: 100vh;
+  padding: 60px 0 80px;
+}
+
+/* Header Section */
+.headerSection {
+  text-align: center;
+  margin-bottom: 50px;
+  animation: fadeIn 0.6s ease-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Wishlist Icon */
+.wishlistIcon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 80px;
+  height: 80px;
+  background: linear-gradient(135deg, #ff6b9d 0%, #ff1744 100%);
+  border-radius: 50%;
+  margin-bottom: 20px;
+  box-shadow: 0 8px 24px rgba(255, 107, 157, 0.4);
+  animation: heartbeat 2s ease-in-out infinite;
+}
+
+@keyframes heartbeat {
+  0%, 100% {
+    transform: scale(1);
+  }
+  10%, 30% {
+    transform: scale(1.1);
+  }
+  20%, 40% {
+    transform: scale(1);
+  }
+}
+
+.wishlistIcon i {
+  font-size: 36px;
+  color: #ffffff;
+}
+
+/* Page Title */
+.pageTitle {
+  color: #1d1d1f;
+  font-size: 48px;
+  font-weight: 700;
+  margin-bottom: 12px;
+  letter-spacing: -0.5px;
+  background: linear-gradient(135deg, #ff6b9d 0%, #ff1744 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.pageDescription {
+  color: #6b6b6b;
+  font-size: 18px;
+  font-weight: 500;
+  margin: 0;
+  letter-spacing: 0.2px;
+}
+
+/* Content Section */
+.contentSection {
+  animation: fadeIn 0.8s ease-out 0.2s both;
+}
+
+/* Empty State */
+.emptyState {
+  text-align: center;
+  padding: 80px 20px;
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 24px;
+  box-shadow: 0 8px 32px rgba(255, 107, 157, 0.15);
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+.emptyState i {
+  font-size: 80px;
+  color: #ffb3c9;
+  margin-bottom: 24px;
+  display: block;
+  animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.1);
+    opacity: 0.8;
+  }
+}
+
+.emptyState h3 {
+  color: #1d1d1f;
+  font-size: 28px;
+  font-weight: 700;
+  margin-bottom: 12px;
+}
+
+.emptyState p {
+  color: #86868b;
+  font-size: 18px;
+  margin-bottom: 32px;
+}
+
+/* Shop Button */
+.shopButton {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background: linear-gradient(135deg, #ff6b9d 0%, #ff1744 100%);
+  color: #ffffff;
+  padding: 14px 32px;
+  border-radius: 50px;
+  font-size: 16px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 8px 20px rgba(255, 107, 157, 0.3);
+}
+
+.shopButton:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 28px rgba(255, 107, 157, 0.4);
+  color: #ffffff;
+}
+
+.shopButton:active {
+  transform: translateY(-1px);
+}
+
+.shopButton i {
+  font-size: 18px;
+  transition: transform 0.3s ease;
+}
+
+.shopButton:hover i {
+  transform: translateX(4px);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .pageWrapper {
+    padding: 40px 0 60px;
+  }
+
+  .headerSection {
+    margin-bottom: 40px;
+  }
+
+  .wishlistIcon {
+    width: 64px;
+    height: 64px;
+    margin-bottom: 16px;
+  }
+
+  .wishlistIcon i {
+    font-size: 28px;
+  }
+
+  .pageTitle {
+    font-size: 36px;
+  }
+
+  .pageDescription {
+    font-size: 16px;
+  }
+
+  .emptyState {
+    padding: 60px 20px;
+  }
+
+  .emptyState i {
+    font-size: 64px;
+  }
+
+  .emptyState h3 {
+    font-size: 24px;
+  }
+
+  .emptyState p {
+    font-size: 16px;
+    margin-bottom: 28px;
+  }
+
+  .shopButton {
+    padding: 12px 28px;
+    font-size: 15px;
+  }
+}
+
+@media (max-width: 576px) {
+  .pageWrapper {
+    padding: 30px 0 50px;
+  }
+
+  .headerSection {
+    margin-bottom: 30px;
+  }
+
+  .wishlistIcon {
+    width: 56px;
+    height: 56px;
+    margin-bottom: 14px;
+  }
+
+  .wishlistIcon i {
+    font-size: 24px;
+  }
+
+  .pageTitle {
+    font-size: 28px;
+  }
+
+  .pageDescription {
+    font-size: 15px;
+  }
+
+  .emptyState {
+    padding: 50px 16px;
+    border-radius: 20px;
+  }
+
+  .emptyState i {
+    font-size: 56px;
+  }
+
+  .emptyState h3 {
+    font-size: 22px;
+  }
+
+  .emptyState p {
+    font-size: 15px;
+    margin-bottom: 24px;
+  }
+
+  .shopButton {
+    padding: 12px 24px;
+    font-size: 14px;
+  }
+}

@@ -1,0 +1,205 @@
+/* ========== Grid Container ========== */
+.gridContainer {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 30px;
+  padding: 20px 0;
+  margin: 0;
+}
+
+/* ========== Grid Item ========== */
+.gridItem {
+  display: flex;
+  justify-content: center;
+  align-items: stretch;
+  padding: 0;
+  animation: fadeInUp 0.5s ease-out;
+  animation-fill-mode: both;
+}
+
+/* Stagger animation for grid items */
+.gridItem:nth-child(1) { animation-delay: 0.05s; }
+.gridItem:nth-child(2) { animation-delay: 0.1s; }
+.gridItem:nth-child(3) { animation-delay: 0.15s; }
+.gridItem:nth-child(4) { animation-delay: 0.2s; }
+.gridItem:nth-child(5) { animation-delay: 0.25s; }
+.gridItem:nth-child(6) { animation-delay: 0.3s; }
+.gridItem:nth-child(n+7) { animation-delay: 0.35s; }
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Make sure children take full width */
+.gridItem > * {
+  width: 100%;
+}
+
+/* ========== Empty State ========== */
+.emptyState {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 400px;
+  padding: 40px 20px;
+  text-align: center;
+  background: linear-gradient(135deg, rgba(0, 153, 255, 0.03) 0%, rgba(0, 212, 255, 0.03) 100%);
+  border-radius: 20px;
+  border: 2px dashed rgba(0, 153, 255, 0.2);
+  animation: fadeIn 0.5s ease-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.emptyAnimation {
+  width: 100%;
+  max-width: 400px;
+  height: 350px;
+  margin-bottom: 20px;
+}
+
+.emptyState p {
+  font-size: 18px;
+  color: #6c757d;
+  margin: 0;
+  font-weight: 500;
+  letter-spacing: 0.5px;
+}
+
+/* ========== Responsive Design ========== */
+
+/* Extra Large Screens */
+@media (min-width: 1400px) {
+  .gridContainer {
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 35px;
+  }
+}
+
+/* Large Screens */
+@media (min-width: 992px) and (max-width: 1399px) {
+  .gridContainer {
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 30px;
+  }
+}
+
+/* Medium Screens (Tablets) */
+@media (min-width: 768px) and (max-width: 991px) {
+  .gridContainer {
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 25px;
+    padding: 15px 0;
+  }
+
+  .emptyState {
+    min-height: 350px;
+    padding: 30px 15px;
+  }
+
+  .emptyAnimation {
+    max-width: 350px;
+    height: 300px;
+  }
+
+  .emptyState p {
+    font-size: 16px;
+  }
+}
+
+/* Small Screens (Mobile) */
+@media (max-width: 767px) {
+  .gridContainer {
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 20px;
+    padding: 10px 0;
+  }
+
+  .emptyState {
+    min-height: 300px;
+    padding: 25px 15px;
+    border-radius: 15px;
+  }
+
+  .emptyAnimation {
+    max-width: 280px;
+    height: 250px;
+    margin-bottom: 15px;
+  }
+
+  .emptyState p {
+    font-size: 15px;
+  }
+}
+
+/* Extra Small Screens */
+@media (max-width: 480px) {
+  .gridContainer {
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 15px;
+  }
+
+  .emptyState {
+    min-height: 280px;
+    padding: 20px 10px;
+  }
+
+  .emptyAnimation {
+    max-width: 240px;
+    height: 220px;
+  }
+
+  .emptyState p {
+    font-size: 14px;
+  }
+}
+
+/* ========== Grid Layout Alternative (2 columns on small screens) ========== */
+@media (max-width: 576px) {
+  .gridContainer {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+  }
+}
+
+/* ========== Bootstrap Override ========== */
+.gridContainer > * {
+  padding: 0 !important;
+}
+
+/* ========== Performance Optimization ========== */
+.gridItem {
+  will-change: transform, opacity;
+}
+
+.gridItem > * {
+  backface-visibility: hidden;
+  transform: translateZ(0);
+}
+
+/* ========== Print Styles ========== */
+@media print {
+  .gridContainer {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 15px;
+  }
+
+  .emptyState {
+    display: none;
+  }
+}

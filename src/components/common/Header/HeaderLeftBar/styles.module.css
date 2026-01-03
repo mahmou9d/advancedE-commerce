@@ -1,10 +1,35 @@
 .headerLeftBar {
   display: flex;
-  flex-direction: row;
+  align-items: center;
+  gap: 25px;
 }
 
-.headerLeftBar >  div:first-of-type {
-  margin-right: 10px;
-  padding-right: 10px;
-  border-right: 1px solid rgb(255, 0, 0);
+.headerLeftBar > div:not(:last-child) {
+  position: relative;
+  padding-right: 25px;
+}
+
+.headerLeftBar > div:not(:last-child)::after {
+  content: '';
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  height: 30px;
+  width: 2px;
+  background: linear-gradient(180deg, 
+    transparent 0%, 
+    rgba(0, 153, 255, 0.5) 50%, 
+    transparent 100%
+  );
+}
+
+@media (max-width: 991px) {
+  .headerLeftBar {
+    gap: 30px;
+  }
+  
+  .headerLeftBar > div:not(:last-child) {
+    padding-right: 30px;
+  }
 }

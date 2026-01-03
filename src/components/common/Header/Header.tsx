@@ -1,5 +1,4 @@
 import { NavLink, Link, useNavigate } from "react-router-dom";
-// import { HeaderBasket, HeaderWishlist } from "../../eCommerce";
 import { Badge, Navbar, Nav, Container, NavDropdown } from "react-bootstrap";
 import styles from "./styles.module.css";
 import HeaderLeftBar from "./HeaderLeftBar/HeaderLeftBar";
@@ -10,6 +9,7 @@ import { actGetWishlist } from "@store/wishlist/wishlistSlice";
 import { MdOutlineSearch } from "react-icons/md";
 import actGetProductSearch from "@store/products/act/actGetProductSearch";
 import { setSearchText } from "@store/search/searchSlice";
+
 const {
   searchIcon,
   headerContainer,
@@ -18,13 +18,16 @@ const {
   headerLeftBar,
   search,
   searchInput,
-  menu
+  menu,
+  headerWrapper,
+  navbarCustom,
 } = styles;
 
 function Header() {
   const isAdmin = useAppSelector((state) => state.auth.user?.isAdmin);
   const [expanded, setExpanded] = useState(false);
   const [searchs, setSearchs] = useState("");
+  const [scrolled, setScrolled] = useState(false);
   const dispatch = useAppDispatch();
   const { accessToken, user } = useAppSelector((state) => state.auth);
   const navigate = useNavigate();
@@ -40,47 +43,43 @@ function Header() {
     }
   }, [dispatch, accessToken, searchs, navigate]);
 
+  // Handle scroll effect
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 50);
+    };
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
   return (
-    <header>
-      <div className={headerContainer}>
-        <Link to={"/"} style={{ textDecoration: "none", color: "inherit" }}>
-          <h1 className={headerLogo}>
-            <span>Prime</span>
-            <Badge bg="danger">Ecom</Badge>
-          </h1>
-        </Link>
-
-        <div className={headerLeftBar}>
-          <HeaderLeftBar />
-        </div>
-      </div>
-
+    <header className={`${headerWrapper} ${scrolled ? "scrolled" : ""}`}>
       <Navbar
         expanded={expanded}
-        style={{
-          borderRadius: "10px",
-          boxShadow: "0px 0 5px 0px red",
-        }}
         expand="lg"
-        className={menu}
+        className={`${menu} ${navbarCustom}`}
       >
-        {!expanded && (
-          <div className={search}>
-            <MdOutlineSearch className={searchIcon} />
-            <input
-              className={searchInput}
-              placeholder="search"
-              onChange={(e) => setSearchs(e.target.value)}
-            />
-          </div>
-        )}
-        <Container className="menudrop">
+        <Container fluid className={headerContainer}>
+          {/* Logo */}
+          <Link to={"/"} style={{ textDecoration: "none", color: "inherit" }}>
+            <h1 className={headerLogo}>
+              <span className="logo-text">Prime</span>
+              <Badge bg="danger" className="logo-badge">
+                Ecom
+              </Badge>
+            </h1>
+          </Link>
+
+          {/* Mobile Toggle */}
           <Navbar.Toggle
             aria-controls="basic-navbar-nav"
-            onClick={() => setExpanded(expanded ? false : true)}
+            onClick={() => setExpanded(!expanded)}
+            className="order-lg-last"
           />
+
+          {/* Navigation Links */}
           <Navbar.Collapse id="basic-navbar-nav">
-            <Nav className="me-auto">
+            <Nav className="me-auto nav-links-group">
               <Nav.Link
                 as={NavLink}
                 className={Links}
@@ -105,23 +104,26 @@ function Header() {
               >
                 Offers
               </Nav.Link>
-              {/* {!expanded && (
-                <div className={search}>
-                  <MdOutlineSearch className={searchIcon} />
-                  <input
-                    className={searchInput}
-                    placeholder="search"
-                    onChange={(e) => setSearchs(e.target.value)}
-                  />
-                </div>
-              )} */}
             </Nav>
 
-            <Nav>
+            {/* Search Bar */}
+            <div className={search}>
+              <MdOutlineSearch className={searchIcon} />
+              <input
+                className={searchInput}
+                placeholder="Search products..."
+                onChange={(e) => setSearchs(e.target.value)}
+                value={searchs}
+              />
+            </div>
+
+            {/* User Menu */}
+            <Nav className="user-nav-group">
               {!accessToken ? (
                 <>
                   <Nav.Link
                     as={NavLink}
+                    className={Links}
                     to="login"
                     onClick={() => setExpanded(false)}
                   >
@@ -129,6 +131,7 @@ function Header() {
                   </Nav.Link>
                   <Nav.Link
                     as={NavLink}
+                    className={Links}
                     to="register"
                     onClick={() => setExpanded(false)}
                   >
@@ -137,8 +140,9 @@ function Header() {
                 </>
               ) : isAdmin ? (
                 <NavDropdown
-                  title={`Welcome : ${user?.firstName || "Admin"} ${user?.lastName}`}
+                  title={`${user?.firstName || "Admin"}`}
                   id="basic-nav-dropdown"
+                  className="user-dropdown"
                 >
                   <NavDropdown.Item
                     as={NavLink}
@@ -148,7 +152,7 @@ function Header() {
                       navigate("/admin");
                     }}
                   >
-                    Add
+                    Dashboard
                   </NavDropdown.Item>
                   <NavDropdown.Divider />
                   <NavDropdown.Item
@@ -164,8 +168,9 @@ function Header() {
                 </NavDropdown>
               ) : (
                 <NavDropdown
-                  title={`Welcome : ${user?.firstName} ${user?.lastName}`}
+                  title={`${user?.firstName}`}
                   id="basic-nav-dropdown"
+                  className="user-dropdown"
                 >
                   <NavDropdown.Item
                     as={NavLink}
@@ -195,6 +200,11 @@ function Header() {
                 </NavDropdown>
               )}
             </Nav>
+
+            {/* Cart & Wishlist */}
+            <div className={headerLeftBar}>
+              <HeaderLeftBar />
+            </div>
           </Navbar.Collapse>
         </Container>
       </Navbar>

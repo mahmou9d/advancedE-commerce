@@ -1,6 +1,5 @@
 import styles from "./styles.module.css";
-import "./styles.module.css";
-import "./pro.css";
+
 type ProductInfoProps = {
   title: string;
   img: string;
@@ -11,7 +10,7 @@ type ProductInfoProps = {
   style?: React.CSSProperties;
   offer?: number;
   showOffer?: boolean;
-  cat_prefix?:string
+  cat_prefix?: string;
 };
 
 const ProductInfo = ({
@@ -25,26 +24,58 @@ const ProductInfo = ({
   offer,
   showOffer = false,
 }: ProductInfoProps) => {
-  return (
-    <div className={`diraction`}>
-      <div className={`${styles[`product-${direction}`]}`} style={style}>
-        <div className={`${styles[`productImg-${direction}`]}`}>
-          <img src={img} alt={title} width={"200px"} />
-        </div>
-        <div className={`${styles[`productInfo-${direction}`]}`}>
-          <h2 title={title}>{title}</h2>
-          {quantity && <h3>Total Quantity: {quantity}</h3>}
-          {quantity && <h3>Price Total: {(quantity * price).toFixed(2)}</h3>}
+  const {
+    productWrapper,
+    productContainer,
+    productImage,
+    productDetails,
+    productTitle,
+    productQuantity,
+    productPrice,
+    offerPrice,
+    originalPrice,
+  } = styles;
 
-          {price && !showOffer && <p style={{}}>Price: ${price.toFixed(2)}</p>}
-          {showOffer && (
-            <div>
-              <p style={{ color: "orange" }}>Offer Price: ${offer}</p>
-              <p style={{ textDecoration: "line-through", color: "#999" }}>
-                Original: ${price}
+  const containerClass = `${productContainer} ${productContainer}--${direction}`;
+  const imageClass = `${productImage} ${productImage}--${direction}`;
+  const detailsClass = `${productDetails} ${productDetails}--${direction}`;
+
+  return (
+    <div className={productWrapper}>
+      <div className={containerClass} style={style}>
+        <div className={imageClass}>
+          <img src={img} alt={title} />
+        </div>
+
+        <div className={detailsClass}>
+          <h2 className={productTitle} title={title}>
+            {title}
+          </h2>
+
+          {quantity && (
+            <>
+              <p className={productQuantity}>
+                Quantity: <span>{quantity}</span>
               </p>
+              <p className={productPrice}>
+                Total: <span>${(quantity * price).toFixed(2)}</span>
+              </p>
+            </>
+          )}
+
+          {!showOffer && price && (
+            <p className={productPrice}>
+              Price: <span>${price.toFixed(2)}</span>
+            </p>
+          )}
+
+          {showOffer && offer && (
+            <div className={styles.priceSection}>
+              <p className={offerPrice}>${offer.toFixed(2)}</p>
+              <p className={originalPrice}>${price.toFixed(2)}</p>
             </div>
           )}
+
           {children}
         </div>
       </div>

@@ -1,0 +1,311 @@
+/* Layout Wrapper */
+.layoutWrapper {
+  min-height: 100vh;
+  padding: 60px 0 80px;
+}
+
+
+/* Sidebar Column */
+.sidebarCol {
+  margin-bottom: 24px;
+}
+
+/* Sidebar */
+.sidebar {
+  background: #ffffff;
+  border-radius: 20px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  overflow: hidden;
+  position: sticky;
+  top: 80px;
+  animation: slideInLeft 0.6s ease-out;
+}
+
+@keyframes slideInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* Sidebar Header */
+.sidebarHeader {
+  background: linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%);
+  color: #ffffff;
+  padding: 24px 20px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.sidebarHeader i {
+  font-size: 32px;
+}
+
+.sidebarHeader h3 {
+  font-size: 20px;
+  font-weight: 700;
+  margin: 0;
+}
+
+/* Navigation */
+.navigation {
+  padding: 12px 0;
+}
+
+/* Nav Item */
+.navItem {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px 20px;
+  color: #6b6b6b;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  position: relative;
+  border-left: 4px solid transparent;
+}
+
+.navItem i:first-child {
+  font-size: 20px;
+  width: 24px;
+  text-align: center;
+}
+
+.navItem span {
+  flex: 1;
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.navItem i:last-child {
+  font-size: 14px;
+  opacity: 0;
+  transform: translateX(-10px);
+  transition: all 0.3s ease;
+}
+
+.navItem:hover {
+  background: #f8f9fa;
+  color: #0ea5e9;
+}
+
+.navItem:hover i:last-child {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+/* Active Nav Item */
+.navItem.active {
+  background: linear-gradient(90deg, rgba(14, 165, 233, 0.1) 0%, transparent 100%);
+  color: #0ea5e9;
+  border-left-color: #0ea5e9;
+  font-weight: 700;
+}
+
+.navItem.active i:last-child {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+/* Sidebar Footer */
+.sidebarFooter {
+  padding: 16px 20px;
+  border-top: 1px solid #f1f3f5;
+}
+
+/* Logout Button */
+.logoutButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+  padding: 12px 20px;
+  background: #ffffff;
+  color: #dc3545;
+  border: 2px solid #dc3545;
+  border-radius: 12px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.logoutButton:hover {
+  background: #dc3545;
+  color: #ffffff;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(220, 53, 69, 0.3);
+}
+
+.logoutButton:active {
+  transform: translateY(0);
+}
+
+.logoutButton i {
+  font-size: 18px;
+}
+
+/* Content Column */
+.contentCol {
+  animation: fadeIn 0.8s ease-out 0.2s both;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Content Wrapper */
+.contentWrapper {
+  min-height: 500px;
+}
+
+/* Responsive Design */
+@media (max-width: 991px) {
+  .layoutWrapper {
+    padding: 40px 0 60px;
+  }
+
+  .sidebar {
+    position: static;
+  }
+
+  .layoutRow {
+    gap: 0;
+  }
+
+  .sidebarCol {
+    margin-bottom: 32px;
+  }
+}
+
+@media (max-width: 768px) {
+  .layoutWrapper {
+    padding: 30px 0 50px;
+  }
+
+  .sidebar {
+    border-radius: 16px;
+  }
+
+  .sidebarHeader {
+    padding: 20px 16px;
+  }
+
+  .sidebarHeader i {
+    font-size: 28px;
+  }
+
+  .sidebarHeader h3 {
+    font-size: 18px;
+  }
+
+  .navigation {
+    padding: 8px 0;
+  }
+
+  .navItem {
+    padding: 14px 16px;
+  }
+
+  .navItem i:first-child {
+    font-size: 18px;
+  }
+
+  .navItem span {
+    font-size: 14px;
+  }
+
+  .sidebarFooter {
+    padding: 14px 16px;
+  }
+
+  .logoutButton {
+    padding: 11px 18px;
+    font-size: 14px;
+  }
+
+  .sidebarCol {
+    margin-bottom: 24px;
+  }
+}
+
+@media (max-width: 576px) {
+  .layoutWrapper {
+    padding: 20px 0 40px;
+  }
+
+  .sidebar {
+    border-radius: 14px;
+  }
+
+  .sidebarHeader {
+    padding: 18px 14px;
+  }
+
+  .sidebarHeader i {
+    font-size: 26px;
+  }
+
+  .sidebarHeader h3 {
+    font-size: 17px;
+  }
+
+  .navItem {
+    padding: 12px 14px;
+  }
+
+  .navItem i:first-child {
+    font-size: 17px;
+    width: 22px;
+  }
+
+  .navItem span {
+    font-size: 13px;
+  }
+
+  .navItem i:last-child {
+    font-size: 13px;
+  }
+
+  .sidebarFooter {
+    padding: 12px 14px;
+  }
+
+  .logoutButton {
+    padding: 10px 16px;
+    font-size: 13px;
+    border-radius: 10px;
+  }
+
+  .logoutButton i {
+    font-size: 16px;
+  }
+
+  .sidebarCol {
+    margin-bottom: 20px;
+  }
+}
+
+/* Print Styles */
+@media print {
+  .sidebar {
+    display: none;
+  }
+
+  .contentCol {
+    width: 100%;
+  }
+}

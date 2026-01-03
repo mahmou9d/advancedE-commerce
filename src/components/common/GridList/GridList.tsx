@@ -1,38 +1,45 @@
 import { DotLottieReact } from "@lottiefiles/dotlottie-react";
 import { Col, Row } from "react-bootstrap";
-import "./grid.css"
+import styles from "./styles.module.css";
+
+const { gridContainer, gridItem, emptyState, emptyAnimation } = styles;
+
 type GridListProp<T> = {
   records: T[];
   renderItem: (records: T) => React.ReactNode;
+  emptyMessage?: string;
 };
+
 type HasId = { id?: number | string };
 
 const GridList = <T extends HasId>({
   records,
   renderItem,
+  emptyMessage = "No items found",
 }: GridListProp<T>) => {
   const categoriesList =
     records.length > 0 ? (
       records.map((record) => (
-        <Col
-          // xs={3}
-          key={record.id}
-          className="d-flex mb-5 mt-2 grid"
-        >
+        <Col key={record.id} className={gridItem}>
           {renderItem(record)}
         </Col>
       ))
     ) : (
-      <div style={{width:"100%",height:"400px"}}>
-        <DotLottieReact
-          src="https://lottie.host/d80726c0-5de4-4686-8145-99b96b51c244/SAeC8Z4fN4.lottie"
-          loop
-          autoplay
-        />
-      </div>
+      <Col xs={12}>
+        <div className={emptyState}>
+          <div className={emptyAnimation}>
+            <DotLottieReact
+              src="https://lottie.host/d80726c0-5de4-4686-8145-99b96b51c244/SAeC8Z4fN4.lottie"
+              loop
+              autoplay
+            />
+          </div>
+          <p>{emptyMessage}</p>
+        </div>
+      </Col>
     );
 
-  return <Row>{categoriesList}</Row>;
+  return <Row className={gridContainer}>{categoriesList}</Row>;
 };
 
 export default GridList;

@@ -1,0 +1,123 @@
+.heading {
+  margin-bottom: 35px;
+  position: relative;
+  display: inline-block;
+}
+
+.heading h2 {
+  font-size: 32px;
+  font-weight: 700;
+  margin: 0;
+  padding-bottom: 15px;
+  background: linear-gradient(135deg, #00c3ffff 0%, #0099ff 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  letter-spacing: 0.5px;
+  position: relative;
+  display: inline-block;
+}
+
+.headingLine {
+  position: relative;
+  height: 4px;
+  width: 100%;
+  background: linear-gradient(90deg, #0099ff 0%, #00d4ff 100%);
+  border-radius: 2px;
+  box-shadow: 0 2px 10px rgba(0, 153, 255, 0.3);
+}
+
+.headingLine::after {
+  content: '';
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 8px;
+  height: 8px;
+  background: #00d4ff;
+  border-radius: 50%;
+  box-shadow: 0 0 15px rgba(0, 212, 255, 0.6);
+  animation: pulse-dot 2s ease-in-out infinite;
+}
+
+@keyframes pulse-dot {
+  0%, 100% {
+    transform: translateY(-50%) scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: translateY(-50%) scale(1.2);
+    opacity: 0.8;
+  }
+}
+
+/* Alignment Options */
+.heading.left {
+  text-align: left;
+}
+
+.heading.center {
+  text-align: center;
+  display: block;
+}
+
+.heading.center h2 {
+  display: inline-block;
+}
+
+.heading.center .headingLine {
+  margin: 0 auto;
+  max-width: 200px;
+}
+
+.heading.right {
+  text-align: right;
+  float: right;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .heading {
+    margin-bottom: 25px;
+  }
+
+  .heading h2 {
+    font-size: 26px;
+    padding-bottom: 12px;
+  }
+
+  .headingLine {
+    height: 3px;
+  }
+
+  .headingLine::after {
+    width: 6px;
+    height: 6px;
+  }
+}
+
+@media (max-width: 576px) {
+  .heading {
+    margin-bottom: 20px;
+  }
+
+  .heading h2 {
+    font-size: 22px;
+    padding-bottom: 10px;
+  }
+
+  .headingLine {
+    height: 3px;
+  }
+}
+
+/* Dark Mode Support (Optional) */
+@media (prefers-color-scheme: dark) {
+  .heading h2 {
+    background: linear-gradient(135deg, #ffffff 0%, #00d4ff 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+}
