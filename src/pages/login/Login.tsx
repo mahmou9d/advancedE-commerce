@@ -1,4 +1,3 @@
-import { Loading } from "@components/feedback";
 import { Input } from "@components/form";
 import useLogin from "@hooks/useLogin";
 import { Row, Col, Button, Form, Alert, Spinner } from "react-bootstrap";
@@ -23,7 +22,6 @@ const Login = () => {
 
   return (
     <div className={styles.loginContainer}>
-      <Loading loading={loading} error={error} type="table">
         <Row className="justify-content-center">
           <Col>
             <div className={styles.loginCard}>
@@ -123,7 +121,6 @@ const Login = () => {
             </div>
           </Col>
         </Row>
-      </Loading>
     </div>
   );
 };

@@ -2,7 +2,6 @@ import { Button, Col, Form, Row, Spinner } from "react-bootstrap";
 import { Input } from "@components/form";
 import useRegister from "@hooks/useRegister";
 import { Navigate } from "react-router-dom";
-import { Loading } from "@components/feedback";
 import styles from "./styles.module.css";
 
 function Register() {
@@ -24,7 +23,6 @@ function Register() {
 
   return (
     <div className={styles.loginContainer}>
-      <Loading loading={loading} error={error} type="table">
         <Row className="justify-content-center">
           <Col>
             <div className={styles.loginCard}>
@@ -161,7 +159,6 @@ function Register() {
             </div>
           </Col>
         </Row>
-      </Loading>
     </div>
   );
 }

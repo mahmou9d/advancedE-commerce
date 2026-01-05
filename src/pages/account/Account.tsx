@@ -65,16 +65,16 @@ const Account = () => {
               </div>
             </div>
 
-            <div className={styles.cardFooter}>
+            {/* <div className={styles.cardFooter}>
               <button className={styles.editButton}>
                 <i className="bi bi-pencil-square"></i>
                 <span>Edit Profile</span>
               </button>
-            </div>
+            </div> */}
           </div>
 
           {/* Additional Info Card */}
-          <div className={styles.statsCard}>
+          {/* <div className={styles.statsCard}>
             <div className={styles.statItem}>
               <i className="bi bi-bag-check-fill"></i>
               <div className={styles.statContent}>
@@ -102,7 +102,7 @@ const Account = () => {
                 <span className={styles.statLabel}>Reviews</span>
               </div>
             </div>
-          </div>
+          </div> */}
         </div>
       </Container>
     </div>

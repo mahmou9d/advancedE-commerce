@@ -175,6 +175,7 @@ function Header() {
                   <NavDropdown.Item
                     as={NavLink}
                     to="profile"
+                    end
                     onClick={() => setExpanded(false)}
                   >
                     Profile

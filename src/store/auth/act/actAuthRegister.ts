@@ -2,7 +2,7 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { auth, firestore } from "../../firebase";
 import { doc, setDoc, serverTimestamp } from "firebase/firestore";
-import axiosErrorHandler from "@util/axiosErrorHandler"; // لو بتستخدم نفس نظام الخطأ
+import { FirebaseError } from "firebase/app";
 
 type TFormData = {
     firstName: string;
@@ -44,10 +44,33 @@ const actAuthRegister = createAsyncThunk(
                 accessToken: await user.getIdToken(),
             };
         } catch (error) {
-            return rejectWithValue(axiosErrorHandler(error));
+            if (error instanceof FirebaseError) {
+                const errorMessage = getFirebaseErrorMessage(error.code);
+                return rejectWithValue(errorMessage);
+            }
+            return rejectWithValue("An unexpected error occurred");
         }
     }
 );
+
+const getFirebaseErrorMessage = (errorCode: string): string => {
+    switch (errorCode) {
+        case "auth/invalid-email":
+            return "Invalid email address";
+        case "auth/email-already-in-use":
+            return "This email is already registered";
+        case "auth/weak-password":
+            return "Password is too weak";
+        case "auth/operation-not-allowed":
+            return "Registration is currently disabled";
+        case "auth/network-request-failed":
+            return "Network connection error";
+        case "auth/too-many-requests":
+            return "Too many attempts, please try again later";
+        default:
+            return "An error occurred during registration";
+    }
+};
 
 export default actAuthRegister;
 

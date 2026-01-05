@@ -20,7 +20,6 @@ const Search = lazy(() => import("@pages/search/Search"));
 import Error from "@pages/Error";
 // import { DotLottieReact } from "@lottiefiles/dotlottie-react";
 import PageSuspenseFallback from "@components/feedback/PageSuspenseFallback/PageSuspenseFallback";
-import { DotLottieReact } from "@lottiefiles/dotlottie-react";
 import ProtectedRoute from "@components/Auth/ProtectedRoute";
 
 const router = createBrowserRouter([
@@ -38,13 +37,22 @@ const router = createBrowserRouter([
               alignItems: "center",
             }}
           >
-            <div style={{ width: "200px" }}>
-              <DotLottieReact
-                src="https://lottie.host/d023ab73-6fe0-4758-9c9f-fa481de0ed37/FdTUGU5aYc.lottie"
-                loop
-                autoplay
-              />
-            </div>
+            <div
+              style={{
+                width: "60px",
+                height: "60px",
+                border: "5px solid rgba(255, 255, 255, 0.2)",
+                borderTop: "5px solid #3498db",
+                borderRadius: "50%",
+                animation: "spin 0.8s linear infinite",
+              }}
+            />
+            <style>{`
+              @keyframes spin {
+                0% { transform: rotate(0deg); }
+                100% { transform: rotate(360deg); }
+              }
+            `}</style>
           </div>
         }
       >
@@ -52,27 +60,6 @@ const router = createBrowserRouter([
       </Suspense>
     ),
     errorElement: (
-      // <Suspense
-      //   fallback={
-      //     <div
-      //       style={{
-      //         width: "100px",
-      //         height: "70px",
-      //         marginLeft: "auto",
-      //         marginRight: "auto",
-      //         marginTop: "50px",
-      //       }}
-      //     >
-      //       <DotLottieReact
-      //         src="https://lottie.host/d023ab73-6fe0-4758-9c9f-fa481de0ed37/FdTUGU5aYc.lottie"
-      //         loop
-      //         autoplay
-      //       />
-      //     </div>
-      //   }
-      // >
-      //   <Error />
-      // </Suspense>
       <PageSuspenseFallback>
         <Error />
       </PageSuspenseFallback>
@@ -81,27 +68,6 @@ const router = createBrowserRouter([
       {
         index: true,
         element: (
-          // <Suspense
-          //   fallback={
-          //     <div
-          //       style={{
-          //         width: "100px",
-          //         height: "70px",
-          //         marginLeft: "auto",
-          //         marginRight: "auto",
-          //         marginTop: "50px",
-          //       }}
-          //     >
-          //       <DotLottieReact
-          //         src="https://lottie.host/d023ab73-6fe0-4758-9c9f-fa481de0ed37/FdTUGU5aYc.lottie"
-          //         loop
-          //         autoplay
-          //       />
-          //     </div>
-          //   }
-          // >
-          //   <Home />
-          // </Suspense>
           <PageSuspenseFallback>
             <Home />
           </PageSuspenseFallback>
@@ -110,27 +76,6 @@ const router = createBrowserRouter([
       {
         path: "categories",
         element: (
-          // <Suspense
-          //   fallback={
-          //     <div
-          //       style={{
-          //         width: "100px",
-          //         height: "70px",
-          //         marginLeft: "auto",
-          //         marginRight: "auto",
-          //         marginTop: "50px",
-          //       }}
-          //     >
-          //       <DotLottieReact
-          //         src="https://lottie.host/d023ab73-6fe0-4758-9c9f-fa481de0ed37/FdTUGU5aYc.lottie"
-          //         loop
-          //         autoplay
-          //       />
-          //     </div>
-          //   }
-          // >
-          //   <Categories />
-          // </Suspense>
           <PageSuspenseFallback>
             <Categories />
           </PageSuspenseFallback>
@@ -139,27 +84,6 @@ const router = createBrowserRouter([
       {
         path: "categories/products/:prefix",
         element: (
-          // <Suspense
-          //   fallback={
-          //     <div
-          //       style={{
-          //         width: "100px",
-          //         height: "70px",
-          //         marginLeft: "auto",
-          //         marginRight: "auto",
-          //         marginTop: "50px",
-          //       }}
-          //     >
-          //       <DotLottieReact
-          //         src="https://lottie.host/d023ab73-6fe0-4758-9c9f-fa481de0ed37/FdTUGU5aYc.lottie"
-          //         loop
-          //         autoplay
-          //       />
-          //     </div>
-          //   }
-          // >
-          //   <Products />
-          // </Suspense>
           <PageSuspenseFallback>
             <Products />
           </PageSuspenseFallback>
@@ -180,27 +104,6 @@ const router = createBrowserRouter([
       {
         path: "offers",
         element: (
-          // <Suspense
-          //   fallback={
-          //     <div
-          //       style={{
-          //         width: "100px",
-          //         height: "70px",
-          //         marginLeft: "auto",
-          //         marginRight: "auto",
-          //         marginTop: "50px",
-          //       }}
-          //     >
-          //       <DotLottieReact
-          //         src="https://lottie.host/d023ab73-6fe0-4758-9c9f-fa481de0ed37/FdTUGU5aYc.lottie"
-          //         loop
-          //         autoplay
-          //       />
-          //     </div>
-          //   }
-          // >
-          //   <Offers />
-          // </Suspense>
           <PageSuspenseFallback>
             <Offers />
           </PageSuspenseFallback>
@@ -209,27 +112,6 @@ const router = createBrowserRouter([
       {
         path: "login",
         element: (
-          // <Suspense
-          //   fallback={
-          //     <div
-          //       style={{
-          //         width: "100px",
-          //         height: "70px",
-          //         marginLeft: "auto",
-          //         marginRight: "auto",
-          //         marginTop: "50px",
-          //       }}
-          //     >
-          //       <DotLottieReact
-          //         src="https://lottie.host/d023ab73-6fe0-4758-9c9f-fa481de0ed37/FdTUGU5aYc.lottie"
-          //         loop
-          //         autoplay
-          //       />
-          //     </div>
-          //   }
-          // >
-          //   <Login />
-          // </Suspense>
           <PageSuspenseFallback>
             <Login />
           </PageSuspenseFallback>
@@ -238,27 +120,6 @@ const router = createBrowserRouter([
       {
         path: "wishlist",
         element: (
-          // <Suspense
-          //   fallback={
-          //     <div
-          //       style={{
-          //         width: "100px",
-          //         height: "70px",
-          //         marginLeft: "auto",
-          //         marginRight: "auto",
-          //         marginTop: "50px",
-          //       }}
-          //     >
-          //       <DotLottieReact
-          //         src="https://lottie.host/d023ab73-6fe0-4758-9c9f-fa481de0ed37/FdTUGU5aYc.lottie"
-          //         loop
-          //         autoplay
-          //       />
-          //     </div>
-          //   }
-          // >
-          //   <WishList />
-          // </Suspense>
           <ProtectedRoute>
             <PageSuspenseFallback>
               <WishList />
@@ -269,27 +130,6 @@ const router = createBrowserRouter([
       {
         path: "register",
         element: (
-          // <Suspense
-          //   fallback={
-          //     <div
-          //       style={{
-          //         width: "100px",
-          //         height: "70px",
-          //         marginLeft: "auto",
-          //         marginRight: "auto",
-          //         marginTop: "50px",
-          //       }}
-          //     >
-          //       <DotLottieReact
-          //         src="https://lottie.host/d023ab73-6fe0-4758-9c9f-fa481de0ed37/FdTUGU5aYc.lottie"
-          //         loop
-          //         autoplay
-          //       />
-          //     </div>
-          //   }
-          // >
-          //   <Register />
-          // </Suspense>
           <PageSuspenseFallback>
             <Register />
           </PageSuspenseFallback>
@@ -298,27 +138,6 @@ const router = createBrowserRouter([
       {
         path: "cart",
         element: (
-          // <Suspense
-          //   fallback={
-          //     <div
-          //       style={{
-          //         width: "100px",
-          //         height: "70px",
-          //         marginLeft: "auto",
-          //         marginRight: "auto",
-          //         marginTop: "50px",
-          //       }}
-          //     >
-          //       <DotLottieReact
-          //         src="https://lottie.host/d023ab73-6fe0-4758-9c9f-fa481de0ed37/FdTUGU5aYc.lottie"
-          //         loop
-          //         autoplay
-          //       />
-          //     </div>
-          //   }
-          // >
-          //   <Cart />
-          // </Suspense>
           <PageSuspenseFallback>
             <Cart />
           </PageSuspenseFallback>
@@ -355,9 +174,9 @@ const router = createBrowserRouter([
       {
         path: "admin",
         element: (
-          <PageSuspenseFallback>
+          <ProtectedRoute>
             <Admin />
-          </PageSuspenseFallback>
+          </ProtectedRoute>
         ),
       },
       {

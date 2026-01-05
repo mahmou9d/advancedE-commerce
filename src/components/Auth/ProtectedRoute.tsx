@@ -2,10 +2,16 @@ import { useAppSelector } from "@store/hooks";
 import { Navigate } from "react-router-dom";
 
 const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
-  const { accessToken } = useAppSelector((state) => state.auth);
+  const { user } = useAppSelector((state) => state.auth);
+  console.log(user);
 
-  if (!accessToken) {
-    return <Navigate to="/login?message=login_required" />;
+  if (!user) {
+    return <Navigate to="/login" />;
+  }
+
+  if (!user.isAdmin) {
+    alert("You are not authorized to access this page");
+    return <Navigate to="/" />;
   }
 
   return <>{children}</>;

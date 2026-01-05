@@ -1,7 +1,7 @@
 import { ChangeEvent, useRef, useState } from "react";
 import "./Admin.css";
 import { IoMdImages } from "react-icons/io";
-import { Button, Spinner } from "react-bootstrap";
+import { Button, Spinner, Form } from "react-bootstrap";
 import { useAppDispatch, useAppSelector } from "@store/hooks";
 import { TProduct } from "@customTypes/product";
 import actAddProduct from "@store/products/act/actAddProduct";
@@ -14,7 +14,7 @@ import { Loading } from "@components/feedback";
 const uploadToImgBB = async (file: File): Promise<string> => {
   const formData = new FormData();
   formData.append("image", file);
-  const API_KEY = "cabad257b34a18c7d587555fd97270e9"; 
+  const API_KEY = "cabad257b34a18c7d587555fd97270e9";
 
   const res = await fetch(`https://api.imgbb.com/1/upload?key=${API_KEY}`, {
     method: "POST",
@@ -61,7 +61,13 @@ const Admin = () => {
   };
 
   const handleSubmit = async () => {
-    if (!title || !price || !limit || (!imagePreview && !product?.img)) {
+    if (
+      !title ||
+      !price ||
+      !limit ||
+      !catprefix ||
+      (!imagePreview && !product?.img)
+    ) {
       alert("Please fill in all fields");
       return;
     }
@@ -75,7 +81,6 @@ const Admin = () => {
       }
 
       if (product?.id) {
-        
         const updatedProduct = {
           ...product,
           title,
@@ -91,7 +96,6 @@ const Admin = () => {
         );
         alert("✅ Product modified successfully");
       } else {
-        
         const newProduct: Omit<TProduct, "id"> = {
           title,
           price,
@@ -102,7 +106,9 @@ const Admin = () => {
         };
 
         await dispatch(actAddProduct(newProduct));
-        await dispatch(actGetProductsByCatPrefix(newProduct.cat_prefix as string));
+        await dispatch(
+          actGetProductsByCatPrefix(newProduct.cat_prefix as string)
+        );
         alert("✅ Product Added successfully");
       }
 
@@ -124,7 +130,9 @@ const Admin = () => {
   const handleDelete = async () => {
     if (!product?.id) return;
 
-    const confirmDelete = window.confirm("Are you sure you want to delete a product ?");
+    const confirmDelete = window.confirm(
+      "Are you sure you want to delete a product ?"
+    );
     if (!confirmDelete) return;
 
     setIsSubmitting1(true);
@@ -166,43 +174,67 @@ const Admin = () => {
         />
 
         <div className="left">
-          <label className="font">Title</label>
-          <input
-            className="input"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-          />
+          <Form.Group>
+            <Form.Label className="font">Title</Form.Label>
+            <Form.Control
+              className="input"
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+              placeholder="Enter product title"
+            />
+          </Form.Group>
 
-          <label className="font">Category</label>
-          <input
-            className="input"
-            value={catprefix}
-            onChange={(e) => setCatprefix(e.target.value)}
-          />
-          <div className="price" style={{display: "flex", gap: "10px",marginTop: "10px",marginBottom:"10px",alignItems:"center"}}>
-            <label className="font">Price</label>
-            <input
+          <Form.Group>
+            <Form.Label className="font">Category</Form.Label>
+            <Form.Select
               className="input"
-              type="number"
-              value={price}
-              onChange={(e) => setPrice(Number(e.target.value))}
-            />
-            <label className="font">offer</label>
-            <input
-              className="input"
-              type="number"
-              value={offer}
-              onChange={(e) => setOffer(Number(e.target.value))}
-            />
+              value={catprefix}
+              onChange={(e) => setCatprefix(e.target.value)}
+            >
+              <option value="">Select Category</option>
+              <option value="shoes">Shoes</option>
+              <option value="electronics">Electronics</option>
+              <option value="sport">Sport</option>
+              <option value="kids">Kids</option>
+              <option value="women">Women</option>
+              <option value="men">Men</option>
+            </Form.Select>
+          </Form.Group>
+
+          <div className="price">
+            <Form.Group>
+              <Form.Label className="font">Price</Form.Label>
+              <Form.Control
+                className="input"
+                type="number"
+                value={price}
+                onChange={(e) => setPrice(Number(e.target.value))}
+                placeholder="0"
+              />
+            </Form.Group>
+
+            <Form.Group>
+              <Form.Label className="font">Offer</Form.Label>
+              <Form.Control
+                className="input"
+                type="number"
+                value={offer}
+                onChange={(e) => setOffer(Number(e.target.value))}
+                placeholder="0"
+              />
+            </Form.Group>
           </div>
 
-          <label className="font">Limit</label>
-          <input
-            className="input"
-            type="number"
-            value={limit}
-            onChange={(e) => setLimit(Number(e.target.value))}
-          />
+          <Form.Group>
+            <Form.Label className="font">Limit</Form.Label>
+            <Form.Control
+              className="input"
+              type="number"
+              value={limit}
+              onChange={(e) => setLimit(Number(e.target.value))}
+              placeholder="0"
+            />
+          </Form.Group>
 
           <div className="toggleGroup">
             <Button
@@ -226,7 +258,7 @@ const Admin = () => {
                 variant="danger"
                 style={{ width: "100%", marginTop: "10px" }}
                 onClick={handleDelete}
-                disabled={isSubmitting}
+                disabled={isSubmitting1}
               >
                 {isSubmitting1 ? (
                   <>

@@ -2,7 +2,6 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { doc, getDoc } from "firebase/firestore";
 import { auth, firestore } from "../../firebase";
-// import axiosErrorHandler from "@util/axiosErrorHandler";
 import { FirebaseError } from "firebase/app";
 
 type TFormData = {
@@ -27,7 +26,7 @@ const actAuthLogin = createAsyncThunk(
             const userDoc = await getDoc(doc(firestore, "users", user.uid));
             const userData = userDoc.data();
             console.log(userDoc,"userCredential")
-            const isAdmin = user.email === "mohnud0987@gmail.com";
+            const isAdmin = user.email === "mohnud0987a@gmail.com";
 
             return {
                 user: {
@@ -40,37 +39,33 @@ const actAuthLogin = createAsyncThunk(
                 accessToken: await user.getIdToken(),
             };
         } catch (error) {
-            // معالجة أخطاء Firebase
             if (error instanceof FirebaseError) {
                 const errorMessage = getFirebaseErrorMessage(error.code);
                 return rejectWithValue(errorMessage);
             }
-
-            // معالجة الأخطاء الأخرى
             return rejectWithValue("حدث خطأ غير متوقع");
         }
     }
 );
 
-// دالة لترجمة أكواد أخطاء Firebase إلى رسائل واضحة
 const getFirebaseErrorMessage = (errorCode: string): string => {
     switch (errorCode) {
         case "auth/invalid-email":
-            return "البريد الإلكتروني غير صحيح";
+            return "Invalid email address";
         case "auth/user-disabled":
-            return "هذا الحساب معطل";
+            return "This account has been disabled";
         case "auth/user-not-found":
-            return "البريد الإلكتروني غير مسجل";
+            return "Email not registered";
         case "auth/wrong-password":
-            return "كلمة المرور غير صحيحة";
+            return "Incorrect password";
         case "auth/invalid-credential":
-            return "بيانات الدخول غير صحيحة";
+            return "Invalid login credentials";
         case "auth/too-many-requests":
-            return "محاولات كثيرة جداً، حاول لاحقاً";
+            return "Too many attempts, please try again later";
         case "auth/network-request-failed":
-            return "خطأ في الاتصال بالإنترنت";
+            return "Network connection error";
         default:
-            return "حدث خطأ أثناء تسجيل الدخول";
+            return "An error occurred during login";
     }
 };
 

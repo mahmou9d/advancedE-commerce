@@ -11,74 +11,181 @@ input[type="number"] {
 .center {
   display: flex;
   flex-direction: row;
-  justify-content: space-evenly;
+  justify-content: center;
   align-items: center;
-  height: 100%;
-  gap: 20px;
+  min-height: calc(100vh - 100px);
+  gap: 40px;
+  padding: 40px 20px;
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
 }
 
 .center .left {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  gap: 10px;
+  align-items: stretch;
+  gap: 20px;
+  background: rgba(255, 255, 255, 0.05);
+  padding: 30px;
+  border-radius: 15px;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
 }
 
 .center .left .font {
-  font-size: 20px;
-  font-weight: bold;
-  margin-bottom: 10px;
-  letter-spacing: 1px;
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 8px;
+  letter-spacing: 0.5px;
+  color: #e0e0e0;
+  text-transform: uppercase;
 }
+
 .center .left .input {
-  width: 300px;
-  height: 45px;
+  width: 100%;
+  min-width: 300px;
+  height: 50px;
   border-radius: 10px;
-  border: 1px solid gray;
-  background: transparent;
-  padding: 5px 10px;
-  color: white;
+  border: 1px solid rgba(255, 255, 255, 0.2) !important;
+  background: rgba(255, 255, 255, 0.05) !important;
+  padding: 12px 16px;
+  color: white !important;
+  font-size: 15px;
+  transition: all 0.3s ease;
 }
-.button1 {
-  width: 50%;
-  height: 400px;
-  border-radius: 10px;
-  border: 1px solid gray;
-  background-color: transparent;
+
+.center .left .input:focus {
+  outline: none;
+  border-color: #4a90e2 !important;
+  background: rgba(255, 255, 255, 0.08) !important;
+  box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.2) !important;
+}
+
+.center .left .input::placeholder {
+  color: rgba(255, 255, 255, 0.4);
+}
+
+/* Styling for Form.Select */
+.center .left select.input {
+  cursor: pointer;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23ffffff' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 16px center;
+  background-size: 12px;
+  padding-right: 40px;
+}
+
+.center .left select.input option {
+  background: #1a1a2e;
   color: white;
+  padding: 10px;
+}
+
+.button1 {
+  width: 450px;
+  height: 450px;
+  border-radius: 15px;
+  border: 2px dashed rgba(255, 255, 255, 0.3);
+  background: rgba(255, 255, 255, 0.05);
+  color: rgba(255, 255, 255, 0.6);
   font-size: 16px;
   cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  backdrop-filter: blur(10px);
 }
-.price{
-      display: flex
-;
-    gap: 10px;
-    margin-top: 10px;
-    margin-bottom: 10px;
-    align-items: center;
+
+.button1:hover {
+  border-color: #4a90e2;
+  background: rgba(255, 255, 255, 0.08);
+  color: #4a90e2;
+  transform: translateY(-5px);
+  box-shadow: 0 10px 30px rgba(74, 144, 226, 0.2);
 }
-.toggleGroup{
+
+.button1 img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+}
+
+.button1 img:hover {
+  transform: scale(1.05);
+}
+
+.price {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  width: 100%;
+  margin: 10px 0;
+}
+
+.toggleGroup {
   display: flex;
   width: 100%;
-  gap: 5px;
+  gap: 10px;
+  margin-top: 10px;
 }
-@media (max-width: 767px) {
-.center {
-    flex-direction: column;
-    align-items: center;
-    margin-bottom: 20px;
-  }
-  .button1{
-    width: 95%;
-  }
-  .toggleGroup{
-  display: flex;
-flex-direction: column;
+
+.toggleGroup button {
+  font-weight: 600;
+  padding: 12px 24px;
+  border-radius: 10px;
+  transition: all 0.3s ease;
 }
+
+.toggleGroup button:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
 }
+
 @media (max-width: 1200px) {
-.price{
-  flex-wrap: wrap;
-  flex-direction: column;
+  .center {
+    flex-direction: column;
+    gap: 30px;
+    padding: 30px 15px;
+  }
+
+  .button1 {
+    width: 100%;
+    max-width: 400px;
+    height: 400px;
+  }
+
+  .center .left {
+    width: 100%;
+    max-width: 500px;
+  }
+
+  .price {
+    grid-template-columns: 1fr;
+  }
 }
+
+@media (max-width: 767px) {
+  .center {
+    padding: 20px 10px;
+  }
+
+  .button1 {
+    height: 300px;
+  }
+
+  .center .left {
+    padding: 20px;
+  }
+
+  .center .left .input {
+    min-width: unset;
+  }
+
+  .toggleGroup {
+    flex-direction: column;
+  }
 }
