@@ -25,14 +25,30 @@
   border-radius: 0 !important;
 }
 
-/* ========== Header Container - Single Row Layout ========== */
+/* ========== Header Container ========== */
 .headerContainer {
+  padding: 0 !important;
+  max-width: 1600px;
+  margin: 0 auto;
+}
+
+/* ========== Mobile Header Layout (Hidden on Desktop) ========== */
+.mobileHeader {
+  display: none;
+  width: 100%;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 15px;
+  gap: 15px;
+}
+
+/* ========== Desktop Header Layout (Hidden on Mobile) ========== */
+.desktopNav {
   display: flex;
   align-items: center;
   gap: 20px;
-  padding: 15px 40px !important;
-  max-width: 1600px;
-  margin: 0 auto;
+  padding: 15px 40px;
+  width: 100%;
 }
 
 /* ========== Logo Styling ========== */
@@ -50,10 +66,6 @@
   cursor: pointer;
   white-space: nowrap;
 }
-
-/* .headerLogo:hover {
-  transform: scale(1.05);
-} */
 
 .headerLogo .logo-text {
   background: linear-gradient(135deg, #0099ff, #00d4ff);
@@ -80,7 +92,7 @@
   }
 }
 
-/* ========== Navigation Links Group ========== */
+/* ========== Navigation Links Group (Desktop) ========== */
 :global(.nav-links-group) {
   display: flex;
   align-items: center;
@@ -175,7 +187,7 @@
   color: #00d4ff;
 }
 
-/* ========== User Navigation Group ========== */
+/* ========== User Navigation Group (Desktop) ========== */
 :global(.user-nav-group) {
   display: flex;
   align-items: center;
@@ -250,7 +262,7 @@
 /* ========== Navbar Toggle ========== */
 :global(.navbar-toggler) {
   border: 2px solid rgba(0, 153, 255, 0.3) !important;
-  padding: 6px 10px;
+  padding: 8px 12px;
   border-radius: 8px;
   transition: all 0.3s ease;
 }
@@ -260,33 +272,58 @@
   background: rgba(0, 153, 255, 0.1);
 }
 
-:global(.navbar-toggler-icon) {
-  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba(0, 153, 255, 1)' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e") !important;
-  width: 22px;
-  height: 22px;
+:global(.navbar-toggler:focus) {
+  box-shadow: 0 0 0 0.2rem rgba(0, 153, 255, 0.25) !important;
 }
 
-/* ========== Navbar Collapse ========== */
+:global(.navbar-toggler-icon) {
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba(0, 153, 255, 1)' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e") !important;
+  width: 24px;
+  height: 24px;
+}
+
+/* ========== Navbar Collapse (Mobile Menu) ========== */
 :global(.navbar-collapse) {
-  flex-grow: 1;
+  display: none;
+}
+
+/* Override Bootstrap's default navbar-expand-lg behavior */
+:global(.navbar-expand-lg .navbar-collapse) {
+  display: none !important;
+}
+
+/* ========== Mobile Navigation Styles ========== */
+:global(.mobile-nav-links),
+:global(.mobile-user-nav) {
   display: flex;
-  align-items: center;
+  flex-direction: column;
+  width: 100%;
+  gap: 0;
 }
 
 /* ========== Responsive Design ========== */
+
+/* Large Desktops */
 @media (max-width: 1400px) {
+  .desktopNav {
+    padding: 15px 30px;
+  }
+  
   .search {
     max-width: 350px;
   }
-  
-  .headerContainer {
-    padding: 15px 30px !important;
-  }
 }
 
+/* Medium Desktops */
 @media (max-width: 1200px) {
+  .desktopNav {
+    padding: 15px 25px;
+    gap: 15px;
+  }
+  
   .search {
     max-width: 280px;
+    margin: 0 15px;
   }
   
   .Links {
@@ -297,127 +334,284 @@
   :global(.user-dropdown .dropdown-toggle) {
     padding: 10px 12px !important;
     font-size: 14px;
-  }
-}
-
-@media (max-width: 991px) {
-  .headerContainer {
-    padding: 12px 20px !important;
-    flex-wrap: wrap;
-  }
-
-  :global(.navbar-collapse) {
-    width: 100%;
-    background: rgba(0, 0, 0, 0.4);
-    backdrop-filter: blur(15px);
-    border-radius: 12px;
-    margin-top: 15px;
-    padding: 20px;
-    border: 1px solid rgba(0, 153, 255, 0.2);
-  }
-
-  :global(.nav-links-group),
-  :global(.user-nav-group) {
-    flex-direction: column;
-    width: 100%;
-    gap: 0;
-  }
-
-  .Links {
-    width: 100%;
-    padding: 12px 16px !important;
-    border-radius: 8px;
-    text-align: left;
-  }
-
-  .Links:hover {
-    background: rgba(0, 153, 255, 0.1);
-  }
-
-  .Links::before {
-    display: none;
-  }
-
-  .search {
-    width: 100%;
-    max-width: none;
-    margin: 15px 0;
-    order: -1;
-  }
-
-  .headerLeftBar {
-    width: 100%;
-    justify-content: center;
-    margin-left: 0;
-    margin-top: 15px;
-    padding-left: 0;
-    padding-top: 15px;
-    border-left: none;
-    border-top: 1px solid rgba(0, 153, 255, 0.2);
-  }
-
-  :global(.user-dropdown .dropdown-toggle) {
-    width: 100%;
-    text-align: left;
-    padding: 12px 16px !important;
-  }
-
-  :global(.user-dropdown .dropdown-menu) {
-    width: 100%;
-    position: relative !important;
-    transform: none !important;
-    margin-top: 5px !important;
-    background: rgba(26, 26, 46, 0.6);
-  }
-}
-
-@media (max-width: 576px) {
-  .headerContainer {
-    padding: 10px 15px !important;
-  }
-
-  .headerLogo {
-    font-size: 1.5rem;
-  }
-
-  .headerLogo .logo-badge {
-    font-size: 0.7rem;
-    padding: 4px 8px;
-  }
-
-  .searchInput {
-    padding: 10px 35px 10px 35px;
-    font-size: 13px;
-  }
-
-  .searchIcon {
-    font-size: 18px;
-    left: 12px;
   }
 
   .headerLeftBar {
     gap: 15px;
+    padding-left: 15px;
   }
 }
 
-/* ========== Smooth Transitions ========== */
-* {
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+/* ========== MOBILE LAYOUT (Tablets and Below) ========== */
+@media (max-width: 991px) {
+  /* Hide desktop nav, show mobile header */
+  .desktopNav {
+    display: none !important;
+  }
+  
+  .mobileHeader {
+    display: flex !important;
+  }
+
+  /* Mobile Header Items */
+  .mobileHeader .headerLeftBar {
+    margin-left: 0;
+    padding-left: 0;
+    border-left: none;
+    gap: 12px;
+    flex-shrink: 0;
+  }
+
+  .mobileHeader .headerLogo {
+    font-size: 1.5rem;
+    flex-grow: 1;
+    justify-content: center;
+  }
+
+  /* Show Mobile Collapse Menu */
+  :global(.navbar-collapse) {
+    display: block !important;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    width: 100%;
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+    backdrop-filter: blur(20px);
+    padding: 20px 15px;
+    border-top: 1px solid rgba(0, 153, 255, 0.2);
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
+    max-height: 0;
+    overflow: hidden;
+    opacity: 0;
+    transition: all 0.3s ease;
+  }
+
+  :global(.navbar-expand-lg .navbar-collapse) {
+    display: block !important;
+  }
+
+  :global(.navbar-collapse.show) {
+    max-height: 80vh;
+    opacity: 1;
+    overflow-y: auto;
+  }
+
+  /* Mobile Search Bar */
+  :global(.navbar-collapse) .search {
+    width: 100%;
+    max-width: none;
+    margin: 0 0 20px 0;
+  }
+
+  :global(.navbar-collapse) .searchInput {
+    padding: 12px 40px;
+    font-size: 15px;
+    border-radius: 12px;
+  }
+
+  /* Mobile Navigation Links */
+  :global(.mobile-nav-links) .Links,
+  :global(.mobile-user-nav) .Links {
+    width: 100%;
+    padding: 14px 16px !important;
+    border-radius: 10px;
+    text-align: left;
+    font-size: 15px;
+    background: rgba(255, 255, 255, 0.02);
+    margin-bottom: 8px;
+  }
+
+  :global(.mobile-nav-links) .Links:hover,
+  :global(.mobile-nav-links) .Links.active,
+  :global(.mobile-user-nav) .Links:hover {
+    background: rgba(0, 153, 255, 0.15);
+    transform: translateX(5px);
+  }
+
+  :global(.mobile-nav-links) .Links::before {
+    display: none;
+  }
+
+  /* Mobile User Dropdown */
+  :global(.mobile-user-nav) {
+    margin-top: 15px;
+    padding-top: 15px;
+    border-top: 1px solid rgba(0, 153, 255, 0.2);
+  }
+
+  :global(.mobile-user-nav) :global(.user-dropdown .dropdown-toggle) {
+    width: 100%;
+    text-align: left;
+    padding: 14px 16px !important;
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.02) !important;
+    font-size: 15px;
+  }
+
+  :global(.mobile-user-nav) :global(.user-dropdown.show .dropdown-toggle),
+  :global(.mobile-user-nav) :global(.user-dropdown .dropdown-toggle:hover) {
+    background: rgba(0, 153, 255, 0.15) !important;
+  }
+
+  :global(.mobile-user-nav) :global(.user-dropdown .dropdown-menu) {
+    width: 100%;
+    position: static !important;
+    transform: none !important;
+    margin: 8px 0 0 0 !important;
+    background: rgba(26, 26, 46, 0.8);
+    border: 1px solid rgba(0, 153, 255, 0.3);
+  }
+
+  :global(.mobile-user-nav) :global(.user-dropdown .dropdown-item) {
+    padding: 12px 16px;
+    font-size: 14px;
+  }
+
+  /* Scrollbar for mobile menu */
+  :global(.navbar-collapse.show)::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  :global(.navbar-collapse.show)::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.2);
+  }
+
+  :global(.navbar-collapse.show)::-webkit-scrollbar-thumb {
+    background: rgba(0, 153, 255, 0.4);
+    border-radius: 3px;
+  }
 }
 
+/* Small Tablets */
+@media (max-width: 768px) {
+  .mobileHeader {
+    padding: 10px 12px;
+    gap: 10px;
+  }
+
+  .mobileHeader .headerLogo {
+    font-size: 1.4rem;
+  }
+
+  .mobileHeader .headerLogo .logo-badge {
+    font-size: 0.75rem;
+    padding: 4px 8px;
+  }
+
+  .mobileHeader .headerLeftBar {
+    gap: 10px;
+  }
+
+  :global(.navbar-collapse) {
+    padding: 18px 12px;
+  }
+
+  :global(.mobile-nav-links) .Links,
+  :global(.mobile-user-nav) .Links {
+    padding: 12px 14px !important;
+    font-size: 14px;
+  }
+}
+
+/* Mobile Phones */
+@media (max-width: 576px) {
+  .mobileHeader {
+    padding: 10px;
+    gap: 8px;
+  }
+
+  .mobileHeader .headerLogo {
+    font-size: 1.3rem;
+  }
+
+  .mobileHeader .headerLogo .logo-badge {
+    font-size: 0.7rem;
+    padding: 3px 7px;
+  }
+
+  .mobileHeader .headerLeftBar {
+    gap: 8px;
+  }
+
+  :global(.navbar-toggler) {
+    padding: 6px 10px;
+  }
+
+  :global(.navbar-toggler-icon) {
+    width: 20px;
+    height: 20px;
+  }
+
+  :global(.navbar-collapse) {
+    padding: 15px 10px;
+  }
+
+  :global(.navbar-collapse) .searchInput {
+    padding: 10px 35px;
+    font-size: 14px;
+  }
+
+  :global(.navbar-collapse) .searchIcon {
+    font-size: 18px;
+    left: 12px;
+  }
+
+  :global(.mobile-nav-links) .Links,
+  :global(.mobile-user-nav) .Links {
+    padding: 12px !important;
+    font-size: 14px;
+  }
+}
+
+/* Extra Small Phones */
+@media (max-width: 400px) {
+  .mobileHeader {
+    padding: 8px;
+  }
+
+  .mobileHeader .headerLogo {
+    font-size: 1.2rem;
+  }
+
+  .mobileHeader .headerLogo .logo-badge {
+    font-size: 0.65rem;
+    padding: 3px 6px;
+  }
+}
+
+/* ========== Animations ========== */
 @keyframes slideDown {
   from {
     opacity: 0;
-    transform: translateY(-10px);
+    max-height: 0;
   }
   to {
     opacity: 1;
-    transform: translateY(0);
+    max-height: 80vh;
   }
 }
 
-:global(.navbar-collapse.show),
-:global(.navbar-collapse.collapsing) {
-  animation: slideDown 0.3s ease;
+/* ========== Accessibility ========== */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+.Links:focus-visible,
+:global(.user-dropdown .dropdown-toggle:focus-visible),
+:global(.navbar-toggler:focus-visible) {
+  outline: 2px solid #0099ff;
+  outline-offset: 2px;
+}
+
+/* ========== Smooth Rendering ========== */
+* {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }

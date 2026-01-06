@@ -21,6 +21,8 @@ const {
   menu,
   headerWrapper,
   navbarCustom,
+  mobileHeader,
+  desktopNav,
 } = styles;
 
 function Header() {
@@ -52,6 +54,27 @@ function Header() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  // Close menu when clicking outside
+  useEffect(() => {
+    const handleClickOutside = () => {
+      if (expanded) {
+        setExpanded(false);
+      }
+    };
+
+    if (expanded) {
+      document.addEventListener("click", handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener("click", handleClickOutside);
+    };
+  }, [expanded]);
+
+  const handleNavClick = () => {
+    setExpanded(false);
+  };
+
   return (
     <header className={`${headerWrapper} ${scrolled ? "scrolled" : ""}`}>
       <Navbar
@@ -60,31 +83,56 @@ function Header() {
         className={`${menu} ${navbarCustom}`}
       >
         <Container fluid className={headerContainer}>
-          {/* Logo */}
-          <Link to={"/"} style={{ textDecoration: "none", color: "inherit" }}>
-            <h1 className={headerLogo}>
-              <span className="logo-text">Prime</span>
-              <Badge bg="danger" className="logo-badge">
-                Ecom
-              </Badge>
-            </h1>
-          </Link>
+          {/* Mobile Header Layout - Visible on screens < 992px */}
+          <div className={mobileHeader}>
+            {/* Left: Cart & Wishlist Icons */}
+            <div className={headerLeftBar}>
+              <HeaderLeftBar />
+            </div>
 
-          {/* Mobile Toggle */}
-          <Navbar.Toggle
-            aria-controls="basic-navbar-nav"
-            onClick={() => setExpanded(!expanded)}
-            className="order-lg-last"
-          />
+            {/* Center: Logo */}
+            <Link
+              to={"/"}
+              style={{ textDecoration: "none", color: "inherit" }}
+              onClick={handleNavClick}
+            >
+              <h1 className={headerLogo}>
+                <span className="logo-text">Prime</span>
+                <Badge bg="danger" className="logo-badge">
+                  Ecom
+                </Badge>
+              </h1>
+            </Link>
 
-          {/* Navigation Links */}
-          <Navbar.Collapse id="basic-navbar-nav">
+            {/* Right: Menu Toggle */}
+            <Navbar.Toggle
+              aria-controls="basic-navbar-nav"
+              onClick={(e) => {
+                e.stopPropagation();
+                setExpanded(!expanded);
+              }}
+            />
+          </div>
+
+          {/* Desktop Header Layout - Visible on screens >= 992px */}
+          <div className={desktopNav}>
+            {/* Logo */}
+            <Link to={"/"} style={{ textDecoration: "none", color: "inherit" }}>
+              <h1 className={headerLogo}>
+                <span className="logo-text">Prime</span>
+                <Badge bg="danger" className="logo-badge">
+                  Ecom
+                </Badge>
+              </h1>
+            </Link>
+
+            {/* Navigation Links */}
             <Nav className="me-auto nav-links-group">
               <Nav.Link
                 as={NavLink}
                 className={Links}
                 to="/"
-                onClick={() => setExpanded(false)}
+                onClick={handleNavClick}
               >
                 Home
               </Nav.Link>
@@ -92,7 +140,7 @@ function Header() {
                 as={NavLink}
                 className={Links}
                 to="categories"
-                onClick={() => setExpanded(false)}
+                onClick={handleNavClick}
               >
                 Categories
               </Nav.Link>
@@ -100,7 +148,7 @@ function Header() {
                 as={NavLink}
                 className={Links}
                 to="offers"
-                onClick={() => setExpanded(false)}
+                onClick={handleNavClick}
               >
                 Offers
               </Nav.Link>
@@ -125,7 +173,7 @@ function Header() {
                     as={NavLink}
                     className={Links}
                     to="login"
-                    onClick={() => setExpanded(false)}
+                    onClick={handleNavClick}
                   >
                     Login
                   </Nav.Link>
@@ -133,7 +181,7 @@ function Header() {
                     as={NavLink}
                     className={Links}
                     to="register"
-                    onClick={() => setExpanded(false)}
+                    onClick={handleNavClick}
                   >
                     Register
                   </Nav.Link>
@@ -148,7 +196,7 @@ function Header() {
                     as={NavLink}
                     to="admin"
                     onClick={() => {
-                      setExpanded(false);
+                      handleNavClick();
                       navigate("/admin");
                     }}
                   >
@@ -160,7 +208,7 @@ function Header() {
                     to="/"
                     onClick={() => {
                       dispatch(authLogout());
-                      setExpanded(false);
+                      handleNavClick();
                     }}
                   >
                     Logout
@@ -176,14 +224,14 @@ function Header() {
                     as={NavLink}
                     to="profile"
                     end
-                    onClick={() => setExpanded(false)}
+                    onClick={handleNavClick}
                   >
                     Profile
                   </NavDropdown.Item>
                   <NavDropdown.Item
                     as={NavLink}
                     to="profile/orders"
-                    onClick={() => setExpanded(false)}
+                    onClick={handleNavClick}
                   >
                     Orders
                   </NavDropdown.Item>
@@ -193,7 +241,7 @@ function Header() {
                     to="/"
                     onClick={() => {
                       dispatch(authLogout());
-                      setExpanded(false);
+                      handleNavClick();
                     }}
                   >
                     Logout
@@ -206,6 +254,133 @@ function Header() {
             <div className={headerLeftBar}>
               <HeaderLeftBar />
             </div>
+          </div>
+
+          {/* Mobile Collapsible Menu */}
+          <Navbar.Collapse id="basic-navbar-nav">
+            {/* Search Bar */}
+            <div className={search}>
+              <MdOutlineSearch className={searchIcon} />
+              <input
+                className={searchInput}
+                placeholder="Search products..."
+                onChange={(e) => setSearchs(e.target.value)}
+                value={searchs}
+              />
+            </div>
+
+            {/* Navigation Links */}
+            <Nav className="mobile-nav-links">
+              <Nav.Link
+                as={NavLink}
+                className={Links}
+                to="/"
+                onClick={handleNavClick}
+              >
+                Home
+              </Nav.Link>
+              <Nav.Link
+                as={NavLink}
+                className={Links}
+                to="categories"
+                onClick={handleNavClick}
+              >
+                Categories
+              </Nav.Link>
+              <Nav.Link
+                as={NavLink}
+                className={Links}
+                to="offers"
+                onClick={handleNavClick}
+              >
+                Offers
+              </Nav.Link>
+            </Nav>
+
+            {/* User Menu */}
+            <Nav className="mobile-user-nav">
+              {!accessToken ? (
+                <>
+                  <Nav.Link
+                    as={NavLink}
+                    className={Links}
+                    to="login"
+                    onClick={handleNavClick}
+                  >
+                    Login
+                  </Nav.Link>
+                  <Nav.Link
+                    as={NavLink}
+                    className={Links}
+                    to="register"
+                    onClick={handleNavClick}
+                  >
+                    Register
+                  </Nav.Link>
+                </>
+              ) : isAdmin ? (
+                <NavDropdown
+                  title={`${user?.firstName || "Admin"}`}
+                  id="mobile-nav-dropdown"
+                  className="user-dropdown"
+                >
+                  <NavDropdown.Item
+                    as={NavLink}
+                    to="admin"
+                    onClick={() => {
+                      handleNavClick();
+                      navigate("/admin");
+                    }}
+                  >
+                    Dashboard
+                  </NavDropdown.Item>
+                  <NavDropdown.Divider />
+                  <NavDropdown.Item
+                    as={NavLink}
+                    to="/"
+                    onClick={() => {
+                      dispatch(authLogout());
+                      handleNavClick();
+                    }}
+                  >
+                    Logout
+                  </NavDropdown.Item>
+                </NavDropdown>
+              ) : (
+                <NavDropdown
+                  title={`${user?.firstName}`}
+                  id="mobile-nav-dropdown"
+                  className="user-dropdown"
+                >
+                  <NavDropdown.Item
+                    as={NavLink}
+                    to="profile"
+                    end
+                    onClick={handleNavClick}
+                  >
+                    Profile
+                  </NavDropdown.Item>
+                  <NavDropdown.Item
+                    as={NavLink}
+                    to="profile/orders"
+                    onClick={handleNavClick}
+                  >
+                    Orders
+                  </NavDropdown.Item>
+                  <NavDropdown.Divider />
+                  <NavDropdown.Item
+                    as={NavLink}
+                    to="/"
+                    onClick={() => {
+                      dispatch(authLogout());
+                      handleNavClick();
+                    }}
+                  >
+                    Logout
+                  </NavDropdown.Item>
+                </NavDropdown>
+              )}
+            </Nav>
           </Navbar.Collapse>
         </Container>
       </Navbar>
