@@ -181,6 +181,7 @@
   font-size: 20px;
   pointer-events: none;
   transition: all 0.3s ease;
+  background: #0099ff;
 }
 
 .searchInput:focus ~ .searchIcon {
