@@ -120,11 +120,11 @@ const router = createBrowserRouter([
       {
         path: "wishlist",
         element: (
-          <ProtectedRoute>
+          // <ProtectedRoute>
             <PageSuspenseFallback>
               <WishList />
             </PageSuspenseFallback>
-          </ProtectedRoute>
+          // </ProtectedRoute>
         ),
       },
       {
@@ -146,11 +146,11 @@ const router = createBrowserRouter([
       {
         path: "profile",
         element: (
-          <ProtectedRoute>
+          // <ProtectedRoute>
             <PageSuspenseFallback>
               <ProfileLayout />
             </PageSuspenseFallback>
-          </ProtectedRoute>
+          // </ProtectedRoute>
         ),
         children: [
           {
