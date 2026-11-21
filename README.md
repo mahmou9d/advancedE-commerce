@@ -5,6 +5,8 @@
   <img src="https://img.shields.io/badge/TypeScript-5.2-3178C6?style=for-the-badge&logo=typescript&logoColor=white" />
   <img src="https://img.shields.io/badge/Redux_Toolkit-2.0-764ABC?style=for-the-badge&logo=redux&logoColor=white" />
   <img src="https://img.shields.io/badge/Firebase-11.10-FFCA28?style=for-the-badge&logo=firebase&logoColor=black" />
+  <img src="https://img.shields.io/badge/Stripe-Payment-635BFF?style=for-the-badge&logo=stripe&logoColor=white" />
+  <img src="https://img.shields.io/badge/TailwindCSS-3.4-06B6D4?style=for-the-badge&logo=tailwindcss&logoColor=white" />
   <img src="https://img.shields.io/badge/Vite-5.0-646CFF?style=for-the-badge&logo=vite&logoColor=white" />
 </div>
 
@@ -12,9 +14,9 @@
 
 ## 📖 نبذة عن المشروع
 
-**PrimeEcom** هو تطبيق ويب متكامل لمتجر إلكتروني (E-Commerce) مبني بتقنيات حديثة. يتيح للمستخدمين تصفح المنتجات وإضافتها للسلة أو قائمة الأمنيات، وإتمام الطلبات — كل ذلك من خلال واجهة مستخدم سلسة وسريعة الاستجابة.
+**PrimeEcom** هو تطبيق ويب متكامل لمتجر إلكتروني (E-Commerce) مبني بتقنيات حديثة. يتيح للمستخدمين تصفح المنتجات وإضافتها للسلة أو قائمة الأمنيات، وإتمام الطلبات بالدفع عبر **Stripe** أو الكاش — كل ذلك من خلال واجهة مستخدم داكنة بـ Glassmorphism Design سريعة الاستجابة.
 
-يحتوي المشروع كذلك على **لوحة تحكم للأدمن** تتيح إضافة المنتجات وتعديلها وحذفها بشكل مباشر.
+يحتوي المشروع كذلك على **لوحة تحكم للأدمن** تتيح إضافة المنتجات وتعديلها وحذفها بشكل مباشر، وعلى نظام **تقييمات حقيقي** مرتبط بـ Firebase ومقيّد بالمشترين الموثّقين.
 
 ---
 
@@ -23,18 +25,25 @@
 ### 🛍️ للمستخدم العادي
 | الميزة | الوصف |
 |---|---|
-| 🏠 **الصفحة الرئيسية** | Hero Section مع إحصائيات وبطاقات مميزات الموقع |
+| 🏠 **الصفحة الرئيسية** | Hero Section مع إحصائيات وبطاقات مميزات الموقع ومنتجات Trending |
 | 📦 **تصفح المنتجات** | عرض منتجات مصنّفة حسب الفئات (أحذية، إلكترونيات، رياضة، أطفال، نساء، رجال) |
 | 🔍 **البحث** | البحث عن المنتجات بالاسم في الوقت الفعلي |
-| 🎁 **العروض** | صفحة مخصصة لعرض المنتجات المخفّضة |
+| 🎁 **العروض** | صفحة مخصصة لعرض المنتجات المخفّضة مع Pagination |
 | 🛒 **سلة المشتريات** | إضافة/إزالة منتجات، تحديث الكميات، عرض الإجمالي |
 | ❤️ **قائمة الأمنيات** | حفظ المنتجات المفضلة للرجوع إليها لاحقاً |
 | 👤 **الحساب الشخصي** | عرض بيانات المستخدم وإدارة الحساب |
-| 📋 **الطلبات** | عرض سجل الطلبات السابقة |
+| 📋 **الطلبات** | عرض سجل الطلبات مع Tabs (الكل / قيد المعالجة / مكتمل / معلّق / ملغي) وطباعة الإيصالات |
+| 🔎 **صفحة المنتج** | معرض صور، اختيار الكمية، تبويبات Overview / Specs / Shipping / Reviews |
+| ⭐ **التقييمات** | مراجعات حقيقية من Firebase RTDB — المشترون الموثّقون فقط يقدرون يكتبوا |
+
+### 💳 الدفع
+- **Stripe Visa/Card** — تكامل حقيقي مع Stripe Elements (`CardElement`)
+- **Cash on Delivery** — الدفع عند الاستلام
+- يظهر modal آمن بـ `createPortal` فوق كل العناصر بـ `z-[9999]`
 
 ### 🔐 المصادقة (Authentication)
 - تسجيل حساب جديد (Register) مع التحقق من البيانات عبر **Zod + React Hook Form**
-- تسجيل الدخول (Login)
+- تسجيل الدخول (Login) مع زر **"Use Admin Credentials"** يملأ الفورم تلقائياً
 - حماية الصفحات الخاصة عبر `ProtectedRoute`
 
 ### 🛠️ لوحة تحكم الأدمن
@@ -42,50 +51,58 @@
 - تعديل بيانات منتج موجود
 - حذف منتج بتأكيد
 
+### 📄 صفحات ثابتة
+- `/privacy` — سياسة الخصوصية
+- `/terms` — الشروط والأحكام
+- `/contact` — تواصل معنا
+
 ---
 
 ## 🗂️ هيكل المشروع
 
 ```
 src/
-├── assets/          # الصور والأصول الثابتة
-├── components/      # المكوّنات المشتركة وقابلة إعادة الاستخدام
-│   ├── Auth/        # مكوّنات المصادقة (ProtectedRoute)
-│   ├── common/      # مكوّنات عامة (Navbar, Footer, ...)
-│   ├── eCommerce/   # مكوّنات المتجر (Product, Cart, Wishlist, ...)
-│   ├── feedback/    # مكوّنات التغذية الراجعة (Loading, Skeleton, ...)
-│   └── form/        # مكوّنات النماذج
-├── hooks/           # Custom Hooks مخصصة
-├── layouts/         # تخطيطات الصفحات (MainLayout, ProfileLayout)
-├── pages/           # صفحات التطبيق
-│   ├── home/        # الصفحة الرئيسية
-│   ├── category/    # صفحة الفئات
-│   ├── products/    # صفحة المنتجات
-│   ├── offers/      # صفحة العروض
-│   ├── cart/        # سلة المشتريات
-│   ├── wishlist/    # قائمة الأمنيات
-│   ├── orders/      # الطلبات
-│   ├── account/     # الحساب الشخصي
-│   ├── search/      # البحث
-│   ├── login/       # تسجيل الدخول
-│   ├── signup/      # إنشاء حساب
-│   └── admin/       # لوحة التحكم
-├── routes/          # إعداد التوجيه (AppRouter)
-├── services/        # إعداد Axios
-├── store/           # Redux Store والـ Slices
-│   ├── auth/        # حالة المصادقة
-│   ├── cart/        # حالة السلة
-│   ├── categories/  # حالة الفئات
-│   ├── products/    # حالة المنتجات
-│   ├── wishlist/    # حالة الأمنيات
-│   ├── orders/      # حالة الطلبات
-│   ├── offers/      # حالة العروض
-│   ├── search/      # حالة البحث
-│   └── toasts/      # حالة الإشعارات
-├── styles/          # الملفات العامة للتنسيق
-├── types/           # TypeScript types و interfaces
-├── util/            # دوال مساعدة
-└── validations/     # مخططات التحقق (Zod Schemas)
+├── assets/            # الصور والأصول الثابتة
+├── components/        # المكوّنات المشتركة وقابلة إعادة الاستخدام
+│   ├── Auth/          # مكوّنات المصادقة (ProtectedRoute)
+│   ├── common/        # مكوّنات عامة (Header, Footer, ...)
+│   ├── eCommerce/     # مكوّنات المتجر (Product, Cart, Wishlist, ...)
+│   ├── feedback/      # مكوّنات التغذية الراجعة (Loading, Skeleton, PageSuspenseFallback)
+│   └── form/          # مكوّنات النماذج
+├── hooks/             # Custom Hooks مخصصة
+├── layouts/           # تخطيطات الصفحات (MainLayout, ProfileLayout)
+├── pages/             # صفحات التطبيق
+│   ├── home/          # الصفحة الرئيسية
+│   ├── category/      # صفحة الفئات
+│   ├── productDetails/# صفحة المنتج + ProductReviews
+│   ├── offers/        # صفحة العروض
+│   ├── cart/          # سلة المشتريات
+│   ├── wishlist/      # قائمة الأمنيات
+│   ├── orders/        # الطلبات
+│   ├── account/       # الحساب الشخصي
+│   ├── search/        # البحث
+│   ├── login/         # تسجيل الدخول
+│   ├── signup/        # إنشاء حساب
+│   ├── privacy/       # سياسة الخصوصية
+│   ├── terms/         # الشروط والأحكام
+│   ├── contact/       # تواصل معنا
+│   └── admin/         # لوحة التحكم
+├── routes/            # إعداد التوجيه (AppRouter)
+├── services/          # إعداد Axios + Stripe
+├── store/             # Redux Store والـ Slices
+│   ├── auth/          # حالة المصادقة
+│   ├── cart/          # حالة السلة
+│   ├── categories/    # حالة الفئات
+│   ├── products/      # حالة المنتجات
+│   ├── wishlist/      # حالة الأمنيات
+│   ├── orders/        # حالة الطلبات
+│   ├── offers/        # حالة العروض
+│   ├── search/        # حالة البحث
+│   └── toasts/        # حالة الإشعارات
+├── styles/            # الملفات العامة للتنسيق
+├── types/             # TypeScript types و interfaces
+├── util/              # دوال مساعدة
+└── validations/       # مخططات التحقق (Zod Schemas)
 ```
 
 ---
@@ -99,6 +116,7 @@ src/
 | **TypeScript** | 5.2 | الكتابة الصارمة وسلامة الأنواع |
 | **Vite** | 5.0 | بيئة التطوير وبناء المشروع |
 | **React Router DOM** | 6.21 | التوجيه بين الصفحات |
+| **TailwindCSS** | 3.4 | التنسيق بـ Utility Classes |
 
 ### 🗄️ إدارة الحالة (State Management)
 | التقنية | الإصدار | الغرض |
@@ -106,15 +124,15 @@ src/
 | **Redux Toolkit** | 2.0 | إدارة الحالة العامة للتطبيق |
 | **React Redux** | 9.1 | ربط Redux مع React |
 | **Redux Persist** | 6.0 | الاحتفاظ ببيانات السلة والمصادقة في LocalStorage |
-| **Immer** | 10.1 | تسهيل تعديل الحالة |
 
 ### 🔥 الخلفية والخدمات (Backend & Services)
 | التقنية | الإصدار | الغرض |
 |---|---|---|
-| **Firebase** | 11.10 | المصادقة، قاعدة البيانات (Firestore/Realtime DB)، التخزين |
+| **Firebase Realtime DB** | 11.10 | قاعدة البيانات (المنتجات، الطلبات، التقييمات) |
+| **Firebase Auth** | 11.10 | المصادقة وإدارة المستخدمين |
+| **Stripe** | — | بوابة الدفع بالبطاقة (Visa/Mastercard/Amex) |
 | **Axios** | 1.6 | طلبات HTTP |
-| **JSON Server** | 0.17 | بيئة API تجريبية محلية |
-| **ImgBB API** | — | رفع الصور المنتجات للسحابة |
+| **ImgBB API** | — | رفع صور المنتجات للسحابة |
 
 ### 📝 النماذج والتحقق (Forms & Validation)
 | التقنية | الإصدار | الغرض |
@@ -123,16 +141,6 @@ src/
 | **Zod** | 3.25 | التحقق من صحة البيانات (Schema Validation) |
 | **@hookform/resolvers** | 5.1 | ربط Zod مع React Hook Form |
 
-### 🎨 التنسيق والواجهة (UI & Styling)
-| التقنية | الإصدار | الغرض |
-|---|---|---|
-| **Bootstrap** | 5.3 | نظام الشبكة والمكوّنات الأساسية |
-| **React Bootstrap** | 2.10 | مكوّنات Bootstrap كـ React Components |
-| **React Icons** | 5.5 | مكتبة الأيقونات |
-| **Motion** | 12.23 | الأنيميشن والحركات |
-| **React Content Loader** | 7.0 | Skeleton Loading |
-| **Lottie Files** | 0.14 | الأنيميشن من ملفات Lottie |
-
 ---
 
 ## ⚙️ طريقة تشغيل المشروع
@@ -140,6 +148,8 @@ src/
 ### المتطلبات المسبقة
 - Node.js (النسخة 18 أو أحدث)
 - npm أو yarn
+- حساب Firebase مع Realtime Database مفعّل
+- حساب Stripe (Publishable Key)
 
 ### خطوات التشغيل
 
@@ -151,12 +161,25 @@ cd advancedE-commerce
 # 2. تثبيت الاعتماديات
 npm install
 
-# 3. تشغيل سيرفر التطوير
-npm run dev
+# 3. إعداد متغيرات البيئة
+cp .env.example .env
+# ثم عدّل القيم في ملف .env
 
-# 4. (اختياري) تشغيل JSON Server كـ API محلية
-npx json-server --watch db.json --port 5005
+# 4. تشغيل سيرفر التطوير
+npm run dev
 ```
+
+### متغيرات البيئة `.env`
+
+```env
+# Firebase Realtime Database URL
+VITE_FIREBASE_DATABASE_URL=https://your-project-default-rtdb.firebaseio.com
+
+# Stripe Publishable Key (pk_test_... أو pk_live_...)
+VITE_STRIPE_PUBLISHABLE_KEY=pk_test_xxxxxxxxxxxxxxxxxxxx
+```
+
+> **⚠️ تنبيه:** لا تشارك ملف `.env` أو تضيفه إلى Git. المشروع يتضمن `.env.example` كمرجع.
 
 ### السكريبتات المتاحة
 ```bash
@@ -175,15 +198,19 @@ npm run lint     # فحص جودة الكود
 | `/` | الصفحة الرئيسية | عام |
 | `/categories` | جميع الفئات | عام |
 | `/categories/products/:prefix` | منتجات فئة معينة | عام |
+| `/product/:id` | تفاصيل المنتج + التقييمات | عام |
 | `/offers` | العروض والخصومات | عام |
 | `/cart` | سلة المشتريات | عام |
 | `/wishlist` | قائمة الأمنيات | عام |
 | `/search` | البحث | عام |
 | `/login` | تسجيل الدخول | عام |
 | `/register` | إنشاء حساب | عام |
+| `/privacy` | سياسة الخصوصية | عام |
+| `/terms` | الشروط والأحكام | عام |
+| `/contact` | تواصل معنا | عام |
 | `/profile` | الحساب الشخصي | 🔒 مسجّل دخول |
-| `/profile/orders` | الطلبات | 🔒 مسجّل دخول |
-| `/admin` | لوحة التحكم | 🔒 أدمن |
+| `/profile/orders` | سجل الطلبات | 🔒 مسجّل دخول |
+| `/admin` | لوحة التحكم | 🔒 أدمن فقط |
 
 ---
 
@@ -194,15 +221,29 @@ npm run lint     # فحص جودة الكود
 - **Path Aliases**: استخدام `@pages`, `@components`, `@store`, إلخ بدلاً من المسارات النسبية.
 - **Persistence**: بيانات السلة وقائمة الأمنيات وبيانات تسجيل الدخول محفوظة في المتصفح حتى بعد الإغلاق.
 - **Protected Routes**: حماية الصفحات الحساسة من الوصول غير المصرح به.
+- **Firebase Reviews**: نظام تقييمات حقيقي — يتحقق من سجل الطلبات قبل السماح بالكتابة.
+- **Stripe createPortal**: نافذة الدفع تُعرض فوق جميع العناصر بـ `z-[9999]` لتجنب تعارض z-index.
+- **ENV Variables**: جميع المفاتيح الحساسة (Firebase, Stripe) محفوظة في `.env` ومحمية من Git.
+
+---
+
+## 🔑 حساب الأدمن التجريبي
+
+في صفحة تسجيل الدخول يوجد زر **"Use Admin Credentials"** يملأ الفورم تلقائياً:
+
+| | |
+|---|---|
+| **Email** | `monud0987a@gmail.com` |
+| **Password** | `Qqwe123!@#` |
 
 ---
 
 ## 👤 صاحب المشروع
 
-تم بناء هذا المشروع كمشروع تعليمي متقدم لإتقان بناء تطبيقات React الكاملة مع Redux Toolkit وFirebase.
+تم بناء هذا المشروع كمشروع تعليمي متقدم لإتقان بناء تطبيقات React الكاملة مع Redux Toolkit وFirebase وStripe.
 
 ---
 
 <div align="center">
-  صُنع بـ ❤️ باستخدام React + TypeScript + Redux Toolkit
+  صُنع بـ ❤️ باستخدام React + TypeScript + Redux Toolkit + TailwindCSS + Firebase + Stripe
 </div>

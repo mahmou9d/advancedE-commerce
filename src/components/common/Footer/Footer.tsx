@@ -62,8 +62,9 @@ function Footer() {
               </span>
             </Link>
             <p className="text-sm leading-relaxed">
-              Your trusted destination for premium products. Explore our curated collections of
-              men's, women's, and kids' fashion, electronics, sports gear, and footwear at competitive prices.
+              Your trusted destination for premium products. Explore our curated
+              collections of men's, women's, and kids' fashion, electronics,
+              sports gear, and footwear at competitive prices.
             </p>
           </div>
 
@@ -108,7 +109,9 @@ function Footer() {
                   </li>
                 ))
               ) : (
-                <li className="text-xs text-slate-500">Loading categories...</li>
+                <li className="text-xs text-slate-500">
+                  Loading categories...
+                </li>
               )}
             </ul>
           </nav>
@@ -135,8 +138,13 @@ function Footer() {
           <p>© 2026 Prime E-commerce. All rights reserved.</p>
           <p>
             Crafted with care by{" "}
-            <strong className="font-semibold text-slate-200">Mahmoud</strong> |
-            Premium E-commerce Solutions
+            <Link
+              to="https://mahmou9d.vercel.app"
+              className="font-semibold text-slate-200"
+            >
+              Mahmoud
+            </Link>{" "}
+            | Premium E-commerce Solutions
           </p>
         </div>
       </div>

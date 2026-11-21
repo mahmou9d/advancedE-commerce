@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Navigate, Link } from "react-router-dom";
 import useLogin from "@hooks/useLogin";
 
@@ -40,16 +41,26 @@ const Icon = ({
 );
 
 const Login = () => {
+  const [filled, setFilled] = useState(false);
+
   const {
     error,
     loading,
     accessToken,
     register,
+    setValue,
     handleSubmit,
     formErrors,
     submitForm,
     searchParams,
   } = useLogin();
+
+  const fillAdmin = () => {
+    setValue("email", "mohnud0987a@gmail.com", { shouldValidate: true });
+    setValue("password", "Qqwe123!@#", { shouldValidate: true });
+    setFilled(true);
+    setTimeout(() => setFilled(false), 2000);
+  };
 
   if (accessToken) {
     return <Navigate to="/" />;
@@ -236,6 +247,83 @@ const Login = () => {
             Sign up
           </Link>
         </p>
+
+        {/* Admin Demo Credentials */}
+        <div className="mt-6 rounded-2xl border border-amber-400/20 bg-amber-500/5 p-4">
+          <div className="flex items-center gap-2 mb-3">
+            <svg
+              className="h-4 w-4 text-amber-400 shrink-0"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              strokeWidth="2"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M13 10V3L4 14h7v7l9-11h-7z"
+              />
+            </svg>
+            <span className="text-xs font-bold uppercase tracking-wider text-amber-400">
+              Admin Demo Account
+            </span>
+          </div>
+
+          <div className="rounded-xl border border-white/8 bg-slate-950/60 px-3 py-2.5 mb-3 space-y-1.5">
+            <div className="flex justify-between text-xs">
+              <span className="text-slate-500 font-semibold">Email</span>
+              <span className="font-mono text-slate-200">
+                mohnud0987a@gmail.com
+              </span>
+            </div>
+            <div className="flex justify-between text-xs">
+              <span className="text-slate-500 font-semibold">Password</span>
+              <span className="font-mono text-slate-200">Qqwe123!@#</span>
+            </div>
+          </div>
+
+          <button
+            type="button"
+            onClick={fillAdmin}
+            className={`w-full inline-flex items-center justify-center gap-2 rounded-xl px-4 py-2.5 text-sm font-semibold transition active:scale-95 ${
+              filled
+                ? "bg-emerald-600/20 text-emerald-400 border border-emerald-400/30"
+                : "bg-amber-500/10 text-amber-300 border border-amber-400/20 hover:bg-amber-500/20"
+            } ${focus}`}
+          >
+            {filled ? (
+              <>
+                <svg
+                  className="h-4 w-4"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  strokeWidth="2.5"
+                >
+                  <polyline points="20 6 9 17 4 12" />
+                </svg>
+                Filled in form!
+              </>
+            ) : (
+              <>
+                <svg
+                  className="h-4 w-4"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"
+                  />
+                </svg>
+                Use Admin Credentials
+              </>
+            )}
+          </button>
+        </div>
       </div>
     </div>
   );

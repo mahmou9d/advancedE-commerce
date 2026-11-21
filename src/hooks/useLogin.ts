@@ -20,6 +20,7 @@ const useLogin = () => {
     const {
         register,
         handleSubmit,
+        setValue,
         formState: { errors: formErrors },
     } = useForm<signInType>({
         mode: "onBlur",
@@ -52,7 +53,7 @@ const useLogin = () => {
 
 
     return {
-        error, loading, accessToken, register,
+        error, loading, accessToken, register, setValue,
         handleSubmit, formErrors, submitForm, searchParams
 }
 }
