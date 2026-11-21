@@ -16,7 +16,7 @@ const uploadToImgBB = async (file: File): Promise<string> => {
 
     const data = await res.json();
 
-    if (!res.ok || !data.success) throw new Error("❌ فشل رفع الصورة");
+    if (!res.ok || !data.success) throw new Error("فشل رفع الصورة");
 
     return data.data.url;
 };

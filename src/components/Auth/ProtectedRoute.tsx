@@ -1,17 +1,27 @@
+import React from "react";
 import { useAppSelector } from "@store/hooks";
-import { Navigate } from "react-router-dom";
+import { Navigate, useLocation } from "react-router-dom";
 
-const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
-  const { user } = useAppSelector((state) => state.auth);
-  console.log(user);
+type ProtectedRouteProps = {
+  children: React.ReactNode;
+  requireAdmin?: boolean;
+};
 
-  if (!user) {
-    return <Navigate to="/login" />;
+const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
+  children,
+  requireAdmin = false,
+}) => {
+  const { user, accessToken } = useAppSelector((state) => state.auth);
+  const location = useLocation();
+
+  // If not logged in, redirect to login page and remember where they wanted to go
+  if (!user && !accessToken) {
+    return <Navigate to="/login" state={{ from: location }} replace />;
   }
 
-  if (!user.isAdmin) {
-    alert("You are not authorized to access this page");
-    return <Navigate to="/" />;
+  // If route requires admin rights and user is not an admin, redirect to home
+  if (requireAdmin && !user?.isAdmin) {
+    return <Navigate to="/" replace />;
   }
 
   return <>{children}</>;

@@ -20,9 +20,11 @@ const actGetProductsByItems = createAsyncThunk(
     try {
       const response = await axios.get<TResponse>('/products.json', { signal });
 
-      const allProducts = Object.values(response.data || {});
-      const filteredProducts = allProducts.filter(product =>
-        itemsId.includes(String(product.id))
+      const allProducts = Array.isArray(response.data)
+        ? (response.data as TProduct[]).filter(Boolean)
+        : Object.values((response.data || {}) as Record<string, TProduct>);
+      const filteredProducts = allProducts.filter(
+        (product) => product && itemsId.includes(String(product.id))
       );
 
       return filteredProducts;

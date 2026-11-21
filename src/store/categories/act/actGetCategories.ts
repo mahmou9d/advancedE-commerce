@@ -12,7 +12,11 @@ const actGetCategories = createAsyncThunk(
       const response = await axios.get<TResponse>(
         "/category.json", { signal }
       );
-      return response.data;
+      if (!response.data) return [];
+      if (Array.isArray(response.data)) {
+        return (response.data as TCategory[]).filter(Boolean);
+      }
+      return Object.values(response.data as Record<string, TCategory>);
     } catch (error) {
       return rejectWithValue(axiosErrorHandler(error))
     }

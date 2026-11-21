@@ -26,7 +26,10 @@ const actAuthLogin = createAsyncThunk(
             const userDoc = await getDoc(doc(firestore, "users", user.uid));
             const userData = userDoc.data();
             console.log(userDoc,"userCredential")
-            const isAdmin = user.email === "mohnud0987a@gmail.com";
+            const isAdmin =
+                user.email === "mohnud0987a@gmail.com" ||
+                Boolean(userData?.isAdmin) ||
+                userData?.role === "admin";
 
             return {
                 user: {

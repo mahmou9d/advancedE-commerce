@@ -9,8 +9,12 @@ const actGetOffers = createAsyncThunk(
     const { rejectWithValue, signal } = thunkAPI;
     try {
       const response = await axios.get("/products.json", { signal });
-      const allProducts = Object.values(response.data || {}) as TResponse;
-      const offerProducts = allProducts.filter((product) => product.offer as number > 0);
+      const allProducts = Array.isArray(response.data)
+        ? (response.data as TProduct[]).filter(Boolean)
+        : (Object.values(response.data || {}) as TResponse);
+      const offerProducts = allProducts.filter(
+        (product) => product && (product.offer as number) > 0
+      );
       return offerProducts;
     } catch (error) {
       return rejectWithValue(axiosErrorHandler(error));

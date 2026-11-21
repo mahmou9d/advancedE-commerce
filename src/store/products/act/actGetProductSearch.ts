@@ -10,9 +10,11 @@ const actGetProductSearch = createAsyncThunk(
     const { rejectWithValue, signal } = thunkAPI;
     try {
       const response = await axios.get<TResponse>('/products.json', { signal });
-      const allProducts = Object.values(response.data || {});
+      const allProducts = Array.isArray(response.data)
+        ? (response.data as TProduct[]).filter(Boolean)
+        : Object.values((response.data || {}) as Record<string, TProduct>);
 
-        return allProducts;
+      return allProducts;
     } catch (error) {
       return rejectWithValue(axiosErrorHandler(error))
 

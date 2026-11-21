@@ -10,8 +10,12 @@ const actGetProductsByCatPrefix = createAsyncThunk(
     const { rejectWithValue, signal } = thunkAPI;
     try {
       const response = await axios.get<TResponse>('/products.json', { signal });
-      const allProducts = Object.values(response.data || {});
-      const filteredProducts = allProducts.filter(product => product.cat_prefix === prefix);
+      const allProducts = Array.isArray(response.data)
+        ? (response.data as TProduct[]).filter(Boolean)
+        : Object.values((response.data || {}) as Record<string, TProduct>);
+      const filteredProducts = allProducts.filter(
+        (product) => product && product.cat_prefix === prefix
+      );
 
       return filteredProducts;
     } catch (error) {

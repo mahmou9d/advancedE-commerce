@@ -44,9 +44,11 @@ const actGetWishlist = createAsyncThunk(
                 { signal }
             );
 
-            const allProducts = Object.values(productsRes.data || {});
+            const allProducts = Array.isArray(productsRes.data)
+                ? (productsRes.data as TProduct[]).filter(Boolean)
+                : Object.values((productsRes.data || {}) as Record<string, TProduct>);
             const filteredProducts = allProducts.filter((product) =>
-                userWishlist.some((item) => item.productId === product.id)
+                product && userWishlist.some((item) => String(item.productId) === String(product.id))
             );
 
             return { data: filteredProducts, dataType: "productsFullInfo" };

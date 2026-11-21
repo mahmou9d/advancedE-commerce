@@ -1,278 +1,228 @@
-import { ChangeEvent, useRef, useState } from "react";
-import "./Admin.css";
-import { IoMdImages } from "react-icons/io";
-import { Button, Spinner, Form } from "react-bootstrap";
-import { useAppDispatch, useAppSelector } from "@store/hooks";
-import { TProduct } from "@customTypes/product";
-import actAddProduct from "@store/products/act/actAddProduct";
-import actEditProduct from "@store/products/act/actEditProduct";
-import actDeleteProduct from "@store/products/act/actDeleteProduct";
-import actGetProductsByCatPrefix from "@store/products/act/actGetProductsByCatPrefix";
-import { useLocation, useNavigate } from "react-router-dom";
-import { Loading } from "@components/feedback";
+import React from "react";
+import { useAppSelector } from "@store/hooks";
+import { useAdminDashboard } from "./hooks/useAdminDashboard";
+import { AdminSidebar } from "./components/AdminSidebar";
+import { AdminHeader } from "./components/AdminHeader";
+import { AdminOverview } from "./components/AdminOverview";
+import { ProductTable } from "./components/ProductTable";
+import { CategoriesView } from "./components/CategoriesView";
+import { OrdersView } from "./components/OrdersView";
+import { ProductFormModal } from "./components/ProductFormModal";
+import { DeleteProductModal } from "./components/DeleteProductModal";
 
-const uploadToImgBB = async (file: File): Promise<string> => {
-  const formData = new FormData();
-  formData.append("image", file);
-  const API_KEY = "cabad257b34a18c7d587555fd97270e9";
+const Admin: React.FC = () => {
+  const { user } = useAppSelector((state) => state.auth);
 
-  const res = await fetch(`https://api.imgbb.com/1/upload?key=${API_KEY}`, {
-    method: "POST",
-    body: formData,
-  });
+  const {
+    currentTab,
+    setCurrentTab,
+    products,
+    orders,
+    stats,
+    isLoading,
+    isRefreshing,
+    feedback,
+    searchQuery,
+    setSearchQuery,
+    productViewMode,
+    setProductViewMode,
+    refreshData,
+    exportProducts,
 
-  const data = await res.json();
-  if (!res.ok || !data.success) throw new Error("Error Uploading product");
-  return data.data.url;
-};
+    // Modal controls
+    isAddModalOpen,
+    openAddModal,
+    closeAddModal,
+    productToEdit,
+    editProduct,
+    saveProduct,
 
-const Admin = () => {
-  const dispatch = useAppDispatch();
-  const navigate = useNavigate();
-  const { loading, error } = useAppSelector((state) => state.products);
+    // Delete controls
+    productToDelete,
+    openDeleteModal,
+    closeDeleteModal,
+    confirmDelete,
+    batchDeleteProducts,
+    isDeleting,
 
-  const location = useLocation();
-  const product = location.state as TProduct | null;
+    // Order actions
+    updateOrderStatus,
+    deleteOrder,
 
-  const [title, setTitle] = useState<string>(product?.title || "");
-  const [offer, setOffer] = useState<number>(product?.offer as number);
-  const [price, setPrice] = useState<number>(product?.price || 0);
-  const [limit, setLimit] = useState<number>(product?.max || 0);
-  const [catprefix, setCatprefix] = useState<string>(product?.cat_prefix || "");
-  const [imagePreview, setImagePreview] = useState<string | null>(
-    product?.img || null
-  );
-  const [imageFile, setImageFile] = useState<File | null>(null);
-  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
-  const [isSubmitting1, setIsSubmitting1] = useState<boolean>(false);
+    // Mobile sidebar
+    isMobileSidebarOpen,
+    openMobileSidebar,
+    closeMobileSidebar,
+  } = useAdminDashboard();
 
-  const fileInputRef = useRef<HTMLInputElement | null>(null);
-
-  const handleClick = () => {
-    fileInputRef.current?.click();
-  };
-
-  const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    if (file && file.type.startsWith("image/")) {
-      setImagePreview(URL.createObjectURL(file));
-      setImageFile(file);
-    }
-  };
-
-  const handleSubmit = async () => {
-    if (
-      !title ||
-      !price ||
-      !limit ||
-      !catprefix ||
-      (!imagePreview && !product?.img)
-    ) {
-      alert("Please fill in all fields");
-      return;
-    }
-
-    setIsSubmitting(true);
-    let finalImageURL = product?.img || "";
-
-    try {
-      if (imageFile) {
-        finalImageURL = await uploadToImgBB(imageFile);
+  // Global Keyboard Shortcuts (Ctrl+K for search, N for new product)
+  React.useEffect(() => {
+    const handleGlobalKey = (e: KeyboardEvent) => {
+      const activeTag = (document.activeElement?.tagName || "").toLowerCase();
+      if (activeTag === "input" || activeTag === "textarea" || activeTag === "select") {
+        return;
       }
 
-      if (product?.id) {
-        const updatedProduct = {
-          ...product,
-          title,
-          offer,
-          price,
-          max: limit,
-          img: finalImageURL,
-          cat_prefix: catprefix,
-        };
-
-        await dispatch(
-          actEditProduct({ product: updatedProduct, imageFile: null })
-        );
-        alert("✅ Product modified successfully");
-      } else {
-        const newProduct: Omit<TProduct, "id"> = {
-          title,
-          price,
-          offer,
-          max: limit,
-          img: finalImageURL,
-          cat_prefix: catprefix,
-        };
-
-        await dispatch(actAddProduct(newProduct));
-        await dispatch(
-          actGetProductsByCatPrefix(newProduct.cat_prefix as string)
-        );
-        alert("✅ Product Added successfully");
+      if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "k") {
+        e.preventDefault();
+        const searchInput = document.getElementById("admin-search-input");
+        searchInput?.focus();
       }
 
-      setTitle("");
-      setPrice(0);
-      setOffer(0);
-      setLimit(0);
-      setCatprefix("");
-      setImageFile(null);
-      setImagePreview(null);
-      navigate("/", { replace: true });
-    } catch (error) {
-      alert("❌ An error occurred while submitting the product");
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
+      if (e.key.toLowerCase() === "n" && !isAddModalOpen && !productToDelete) {
+        e.preventDefault();
+        openAddModal();
+      }
+    };
 
-  const handleDelete = async () => {
-    if (!product?.id) return;
-
-    const confirmDelete = window.confirm(
-      "Are you sure you want to delete a product ?"
-    );
-    if (!confirmDelete) return;
-
-    setIsSubmitting1(true);
-    try {
-      await dispatch(actDeleteProduct(product.id as string));
-      alert("🗑️ Product successfully deleted");
-      navigate("/", { replace: true });
-    } catch (err) {
-      alert("❌ Product deleted failed");
-    } finally {
-      setIsSubmitting1(false);
-    }
-  };
+    window.addEventListener("keydown", handleGlobalKey);
+    return () => window.removeEventListener("keydown", handleGlobalKey);
+  }, [isAddModalOpen, productToDelete, openAddModal]);
 
   return (
-    <Loading loading={loading} error={error} type="cart">
-      <div className="center">
-        {imagePreview ? (
-          <div className="button1" style={{ marginTop: "10px" }}>
-            <img
-              src={imagePreview}
-              alt="preview"
-              style={{ width: "100%", borderRadius: "10px", height: "100%" }}
-              onClick={handleClick}
-            />
-          </div>
-        ) : (
-          <button className="button1" onClick={handleClick}>
-            <IoMdImages style={{ fontSize: "160px" }} />
-          </button>
-        )}
+    <div className="flex min-h-screen bg-slate-950 font-sans text-slate-100 antialiased">
+      {/* Background radial glows */}
+      <div
+        aria-hidden="true"
+        className="fixed inset-0 -z-10 bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 pointer-events-none"
+      />
+      <div
+        aria-hidden="true"
+        className="fixed -top-40 left-1/3 -z-10 h-96 w-96 rounded-full bg-blue-600/15 blur-3xl pointer-events-none"
+      />
+      <div
+        aria-hidden="true"
+        className="fixed bottom-0 right-10 -z-10 h-80 w-80 rounded-full bg-indigo-600/10 blur-3xl pointer-events-none"
+      />
 
-        <input
-          type="file"
-          accept="image/*"
-          ref={fileInputRef}
-          onChange={handleFileChange}
-          style={{ display: "none" }}
+      {/* Sidebar Navigation */}
+      <AdminSidebar
+        currentTab={currentTab}
+        onSelectTab={setCurrentTab}
+        onOpenAddModal={openAddModal}
+        productCount={products.length}
+        orderCount={orders.length}
+        adminEmail={user?.email}
+        isMobileOpen={isMobileSidebarOpen}
+        onCloseMobile={closeMobileSidebar}
+      />
+
+      {/* Main Content Area */}
+      <div className="flex flex-1 flex-col overflow-hidden">
+        {/* Sticky Header */}
+        <AdminHeader
+          currentTab={currentTab}
+          onOpenMobileSidebar={openMobileSidebar}
+          onOpenAddModal={openAddModal}
+          onRefresh={refreshData}
+          isRefreshing={isRefreshing}
+          searchQuery={searchQuery}
+          onSearchChange={setSearchQuery}
         />
 
-        <div className="left">
-          <Form.Group>
-            <Form.Label className="font">Title</Form.Label>
-            <Form.Control
-              className="input"
-              value={title}
-              onChange={(e) => setTitle(e.target.value)}
-              placeholder="Enter product title"
-            />
-          </Form.Group>
-
-          <Form.Group>
-            <Form.Label className="font">Category</Form.Label>
-            <Form.Select
-              className="input"
-              value={catprefix}
-              onChange={(e) => setCatprefix(e.target.value)}
-            >
-              <option value="">Select Category</option>
-              <option value="shoes">Shoes</option>
-              <option value="electronics">Electronics</option>
-              <option value="sport">Sport</option>
-              <option value="kids">Kids</option>
-              <option value="women">Women</option>
-              <option value="men">Men</option>
-            </Form.Select>
-          </Form.Group>
-
-          <div className="price">
-            <Form.Group>
-              <Form.Label className="font">Price</Form.Label>
-              <Form.Control
-                className="input"
-                type="number"
-                value={price}
-                onChange={(e) => setPrice(Number(e.target.value))}
-                placeholder="0"
-              />
-            </Form.Group>
-
-            <Form.Group>
-              <Form.Label className="font">Offer</Form.Label>
-              <Form.Control
-                className="input"
-                type="number"
-                value={offer}
-                onChange={(e) => setOffer(Number(e.target.value))}
-                placeholder="0"
-              />
-            </Form.Group>
-          </div>
-
-          <Form.Group>
-            <Form.Label className="font">Limit</Form.Label>
-            <Form.Control
-              className="input"
-              type="number"
-              value={limit}
-              onChange={(e) => setLimit(Number(e.target.value))}
-              placeholder="0"
-            />
-          </Form.Group>
-
-          <div className="toggleGroup">
-            <Button
-              style={{ width: "100%", marginTop: "10px" }}
-              onClick={handleSubmit}
-              disabled={isSubmitting}
-            >
-              {isSubmitting ? (
-                <>
-                  <Spinner animation="border" size="sm" />
-                </>
-              ) : product?.id ? (
-                "Update"
-              ) : (
-                "Add"
-              )}
-            </Button>
-
-            {product?.id && (
-              <Button
-                variant="danger"
-                style={{ width: "100%", marginTop: "10px" }}
-                onClick={handleDelete}
-                disabled={isSubmitting1}
-              >
-                {isSubmitting1 ? (
-                  <>
-                    <Spinner animation="border" size="sm" />
-                  </>
-                ) : (
-                  "Delete Product"
-                )}
-              </Button>
+        {/* Floating Notification Toast */}
+        {feedback && (
+          <div className="fixed top-5 right-5 z-50 flex items-center gap-3 rounded-2xl border px-4 py-3 text-xs font-semibold shadow-2xl backdrop-blur-xl animate-in fade-in slide-in-from-top-3 duration-200">
+            {feedback.type === "success" ? (
+              <div className="flex items-center gap-2.5 text-emerald-300 border-emerald-500/30 bg-emerald-950/90 shadow-emerald-900/30 border rounded-xl px-3 py-2">
+                <svg className="h-4 w-4 shrink-0 text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                </svg>
+                <span>{feedback.message}</span>
+              </div>
+            ) : (
+              <div className="flex items-center gap-2.5 text-rose-300 border-rose-500/30 bg-rose-950/90 shadow-rose-900/30 border rounded-xl px-3 py-2">
+                <svg className="h-4 w-4 shrink-0 text-rose-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                </svg>
+                <span>{feedback.message}</span>
+              </div>
             )}
           </div>
-        </div>
+        )}
+
+        {/* Tab View Container */}
+        <main className="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8">
+          {isLoading ? (
+            <div className="flex h-96 flex-col items-center justify-center gap-4">
+              <div className="relative flex h-14 w-14 items-center justify-center">
+                <div className="absolute inset-0 rounded-full border-2 border-blue-500/20 animate-ping" />
+                <div className="h-10 w-10 rounded-full border-2 border-blue-400 border-t-transparent animate-spin" />
+              </div>
+              <p className="text-xs font-medium text-slate-400">Loading admin dashboard from Firebase...</p>
+            </div>
+          ) : (
+            <>
+              {currentTab === "overview" && (
+                <AdminOverview
+                  stats={stats}
+                  products={products}
+                  orders={orders}
+                  onSelectTab={setCurrentTab}
+                  onOpenAddModal={openAddModal}
+                  onEditProduct={editProduct}
+                  onSelectCategoryFilter={(prefix) => {
+                    setSearchQuery(prefix);
+                    setCurrentTab("products");
+                  }}
+                />
+              )}
+
+              {currentTab === "products" && (
+                <ProductTable
+                  products={products}
+                  searchQuery={searchQuery}
+                  onSearchChange={setSearchQuery}
+                  onEditProduct={editProduct}
+                  onDeleteProduct={openDeleteModal}
+                  onOpenAddModal={openAddModal}
+                  onExportCSV={exportProducts}
+                  onBatchDelete={batchDeleteProducts}
+                  viewMode={productViewMode}
+                  onViewModeChange={setProductViewMode}
+                />
+              )}
+
+              {currentTab === "categories" && (
+                <CategoriesView
+                  products={products}
+                  onSelectCategory={(prefix) => {
+                    setSearchQuery(prefix);
+                    setCurrentTab("products");
+                  }}
+                  onOpenAddModal={openAddModal}
+                />
+              )}
+
+              {currentTab === "orders" && (
+                <OrdersView
+                  orders={orders}
+                  onUpdateStatus={updateOrderStatus}
+                  onDeleteOrder={deleteOrder}
+                />
+              )}
+            </>
+          )}
+        </main>
       </div>
-    </Loading>
+
+      {/* Add / Edit Product Modal */}
+      <ProductFormModal
+        isOpen={isAddModalOpen}
+        onClose={closeAddModal}
+        productToEdit={productToEdit}
+        onSave={saveProduct}
+      />
+
+      {/* Delete Confirmation Modal */}
+      <DeleteProductModal
+        isOpen={Boolean(productToDelete)}
+        onClose={closeDeleteModal}
+        product={productToDelete}
+        onConfirm={confirmDelete}
+        isDeleting={isDeleting}
+      />
+    </div>
   );
 };
 

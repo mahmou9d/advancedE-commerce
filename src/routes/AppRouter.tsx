@@ -1,61 +1,69 @@
 import { lazy, Suspense } from "react";
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
-// layouts
+import { createBrowserRouter, Navigate, RouterProvider } from "react-router-dom";
+
+// Layouts
 const MainLayout = lazy(() => import("@layouts/MainLayout"));
-// pages
+const ProfileLayout = lazy(() => import("@layouts/ProfileLayout/ProfileLayout"));
+
+// Pages
 const Home = lazy(() => import("@pages/home/Home"));
 const Categories = lazy(() => import("@pages/category/Categories"));
 const Products = lazy(() => import("@pages/products/Products"));
-const Login = lazy(() => import("@pages/login/Login"));
-const Register = lazy(() => import("@pages/signup/Register"));
-// const Error = lazy(() => import("@pages/Error"));
 const Offers = lazy(() => import("@pages/offers/Offers"));
 const Cart = lazy(() => import("@pages/cart/Cart"));
 const WishList = lazy(() => import("@pages/wishlist/WishList"));
-const ProfileLayout = lazy(() => import("@layouts/ProfileLayout/ProfileLayout"));
+const Login = lazy(() => import("@pages/login/Login"));
+const Register = lazy(() => import("@pages/signup/Register"));
+const Search = lazy(() => import("@pages/search/Search"));
 const Account = lazy(() => import("@pages/account/Account"));
 const Orders = lazy(() => import("@pages/orders/Orders"));
 const Admin = lazy(() => import("@pages/admin/Admin"));
-const Search = lazy(() => import("@pages/search/Search"));
+const ProductDetails = lazy(() => import("@pages/productDetails/ProductDetails"));
+const PrivacyPolicy = lazy(() => import("@pages/info/PrivacyPolicy"));
+const TermsConditions = lazy(() => import("@pages/info/TermsConditions"));
+const ContactUs = lazy(() => import("@pages/info/ContactUs"));
 import Error from "@pages/Error";
-// import { DotLottieReact } from "@lottiefiles/dotlottie-react";
+
+// Components & Helpers
 import PageSuspenseFallback from "@components/feedback/PageSuspenseFallback/PageSuspenseFallback";
 import ProtectedRoute from "@components/Auth/ProtectedRoute";
 
+// Sleek full-page loader for main layout suspense
+const FullPageSpinner = () => (
+  <div className="flex min-h-screen w-full items-center justify-center bg-slate-950 font-sans text-slate-100">
+    <div className="flex flex-col items-center gap-4">
+      <div className="relative flex h-14 w-14 items-center justify-center">
+        <div className="absolute inset-0 rounded-full border-2 border-blue-500/20 animate-ping" />
+        <div className="h-10 w-10 rounded-full border-2 border-blue-500 border-t-transparent animate-spin" />
+      </div>
+      <p className="text-xs font-medium tracking-wide text-slate-400">Loading experience...</p>
+    </div>
+  </div>
+);
+
 const router = createBrowserRouter([
+  // Standalone Admin Dashboard (Isolated from public storefront header & footer)
+  {
+    path: "/admin",
+    element: (
+      <ProtectedRoute requireAdmin>
+        <PageSuspenseFallback>
+          <Admin />
+        </PageSuspenseFallback>
+      </ProtectedRoute>
+    ),
+    errorElement: (
+      <PageSuspenseFallback>
+        <Error />
+      </PageSuspenseFallback>
+    ),
+  },
+
+  // Public Storefront (with MainLayout Header & Footer)
   {
     path: "/",
     element: (
-      <Suspense
-        fallback={
-          <div
-            style={{
-              background: "black",
-              height: "100vh",
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-            }}
-          >
-            <div
-              style={{
-                width: "60px",
-                height: "60px",
-                border: "5px solid rgba(255, 255, 255, 0.2)",
-                borderTop: "5px solid #3498db",
-                borderRadius: "50%",
-                animation: "spin 0.8s linear infinite",
-              }}
-            />
-            <style>{`
-              @keyframes spin {
-                0% { transform: rotate(0deg); }
-                100% { transform: rotate(360deg); }
-              }
-            `}</style>
-          </div>
-        }
-      >
+      <Suspense fallback={<FullPageSpinner />}>
         <MainLayout />
       </Suspense>
     ),
@@ -102,36 +110,26 @@ const router = createBrowserRouter([
         },
       },
       {
+        path: "product/:id",
+        element: (
+          <PageSuspenseFallback>
+            <ProductDetails />
+          </PageSuspenseFallback>
+        ),
+      },
+      {
+        path: "products/:id",
+        element: (
+          <PageSuspenseFallback>
+            <ProductDetails />
+          </PageSuspenseFallback>
+        ),
+      },
+      {
         path: "offers",
         element: (
           <PageSuspenseFallback>
             <Offers />
-          </PageSuspenseFallback>
-        ),
-      },
-      {
-        path: "login",
-        element: (
-          <PageSuspenseFallback>
-            <Login />
-          </PageSuspenseFallback>
-        ),
-      },
-      {
-        path: "wishlist",
-        element: (
-          // <ProtectedRoute>
-            <PageSuspenseFallback>
-              <WishList />
-            </PageSuspenseFallback>
-          // </ProtectedRoute>
-        ),
-      },
-      {
-        path: "register",
-        element: (
-          <PageSuspenseFallback>
-            <Register />
           </PageSuspenseFallback>
         ),
       },
@@ -144,13 +142,81 @@ const router = createBrowserRouter([
         ),
       },
       {
+        path: "wishlist",
+        element: (
+          <ProtectedRoute>
+            <PageSuspenseFallback>
+              <WishList />
+            </PageSuspenseFallback>
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "login",
+        element: (
+          <PageSuspenseFallback>
+            <Login />
+          </PageSuspenseFallback>
+        ),
+      },
+      {
+        path: "register",
+        element: (
+          <PageSuspenseFallback>
+            <Register />
+          </PageSuspenseFallback>
+        ),
+      },
+      {
+        path: "search",
+        element: (
+          <PageSuspenseFallback>
+            <Search />
+          </PageSuspenseFallback>
+        ),
+      },
+      // Backward compatibility for capitalized "Search"
+      {
+        path: "Search",
+        element: <Navigate to="/search" replace />,
+      },
+      // Direct access to Orders / Order History
+      {
+        path: "orders",
+        element: <Navigate to="/profile/orders" replace />,
+      },
+      {
+        path: "privacy",
+        element: (
+          <PageSuspenseFallback>
+            <PrivacyPolicy />
+          </PageSuspenseFallback>
+        ),
+      },
+      {
+        path: "terms",
+        element: (
+          <PageSuspenseFallback>
+            <TermsConditions />
+          </PageSuspenseFallback>
+        ),
+      },
+      {
+        path: "contact",
+        element: (
+          <PageSuspenseFallback>
+            <ContactUs />
+          </PageSuspenseFallback>
+        ),
+      },
+      {
         path: "profile",
         element: (
-          // <ProtectedRoute>
+          <ProtectedRoute>
             <PageSuspenseFallback>
               <ProfileLayout />
             </PageSuspenseFallback>
-          // </ProtectedRoute>
+          </ProtectedRoute>
         ),
         children: [
           {
@@ -171,23 +237,17 @@ const router = createBrowserRouter([
           },
         ],
       },
-      {
-        path: "admin",
-        element: (
-          <ProtectedRoute>
-            <Admin />
-          </ProtectedRoute>
-        ),
-      },
-      {
-        path: "Search",
-        element: (
-          <PageSuspenseFallback>
-            <Search />
-          </PageSuspenseFallback>
-        ),
-      },
     ],
+  },
+
+  // Global 404 Catch-All
+  {
+    path: "*",
+    element: (
+      <PageSuspenseFallback>
+        <Error />
+      </PageSuspenseFallback>
+    ),
   },
 ]);
 
