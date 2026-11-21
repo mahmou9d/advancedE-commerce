@@ -14,6 +14,8 @@ const Cart = lazy(() => import("@pages/cart/Cart"));
 const WishList = lazy(() => import("@pages/wishlist/WishList"));
 const Login = lazy(() => import("@pages/login/Login"));
 const Register = lazy(() => import("@pages/signup/Register"));
+const ForgotPassword = lazy(() => import("@pages/auth/ForgotPassword"));
+const ResetPassword = lazy(() => import("@pages/auth/ResetPassword"));
 const Search = lazy(() => import("@pages/search/Search"));
 const Account = lazy(() => import("@pages/account/Account"));
 const Orders = lazy(() => import("@pages/orders/Orders"));
@@ -27,6 +29,7 @@ import Error from "@pages/Error";
 // Components & Helpers
 import PageSuspenseFallback from "@components/feedback/PageSuspenseFallback/PageSuspenseFallback";
 import ProtectedRoute from "@components/Auth/ProtectedRoute";
+import { ToastList } from "@components/feedback";
 
 // Sleek full-page loader for main layout suspense
 const FullPageSpinner = () => (
@@ -51,6 +54,72 @@ const router = createBrowserRouter([
           <Admin />
         </PageSuspenseFallback>
       </ProtectedRoute>
+    ),
+    errorElement: (
+      <PageSuspenseFallback>
+        <Error />
+      </PageSuspenseFallback>
+    ),
+  },
+
+  // Standalone Auth Pages (Without Header & Footer)
+  {
+    path: "/login",
+    element: (
+      <>
+        <PageSuspenseFallback>
+          <Login />
+        </PageSuspenseFallback>
+        <ToastList />
+      </>
+    ),
+    errorElement: (
+      <PageSuspenseFallback>
+        <Error />
+      </PageSuspenseFallback>
+    ),
+  },
+  {
+    path: "/register",
+    element: (
+      <>
+        <PageSuspenseFallback>
+          <Register />
+        </PageSuspenseFallback>
+        <ToastList />
+      </>
+    ),
+    errorElement: (
+      <PageSuspenseFallback>
+        <Error />
+      </PageSuspenseFallback>
+    ),
+  },
+  {
+    path: "/forgot-password",
+    element: (
+      <>
+        <PageSuspenseFallback>
+          <ForgotPassword />
+        </PageSuspenseFallback>
+        <ToastList />
+      </>
+    ),
+    errorElement: (
+      <PageSuspenseFallback>
+        <Error />
+      </PageSuspenseFallback>
+    ),
+  },
+  {
+    path: "/reset-password",
+    element: (
+      <>
+        <PageSuspenseFallback>
+          <ResetPassword />
+        </PageSuspenseFallback>
+        <ToastList />
+      </>
     ),
     errorElement: (
       <PageSuspenseFallback>
@@ -149,22 +218,6 @@ const router = createBrowserRouter([
               <WishList />
             </PageSuspenseFallback>
           </ProtectedRoute>
-        ),
-      },
-      {
-        path: "login",
-        element: (
-          <PageSuspenseFallback>
-            <Login />
-          </PageSuspenseFallback>
-        ),
-      },
-      {
-        path: "register",
-        element: (
-          <PageSuspenseFallback>
-            <Register />
-          </PageSuspenseFallback>
         ),
       },
       {

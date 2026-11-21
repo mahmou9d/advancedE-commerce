@@ -154,6 +154,20 @@ const Register = () => {
       />
 
       <div className="w-full max-w-lg rounded-3xl border border-white/10 bg-slate-900/70 p-8 shadow-2xl shadow-black/50 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.06)] backdrop-blur-md sm:p-10">
+        {/* Brand / Return to Store Link */}
+        <div className="mb-6 text-center">
+          <Link
+            to="/"
+            className="group inline-flex items-center gap-2.5 rounded-2xl border border-white/5 bg-white/5 px-4 py-2 text-sm font-bold text-white transition hover:bg-white/10 hover:border-white/10"
+          >
+            <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-blue-600 text-xs font-black text-white shadow-md shadow-blue-500/30">
+              P
+            </span>
+            <span>Prime<span className="text-blue-400">Ecom</span></span>
+            <span className="text-xs text-slate-400 group-hover:text-slate-200">← Back to Store</span>
+          </Link>
+        </div>
+
         {/* Header */}
         <div className="text-center">
           <h1 className="text-3xl font-bold tracking-tight">Create account</h1>
